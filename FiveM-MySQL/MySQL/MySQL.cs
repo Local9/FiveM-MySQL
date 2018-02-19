@@ -10,20 +10,16 @@ namespace GHMatti.MySQL
     public class MySQL
     {
         private Core.GHMattiTaskScheduler queryScheduler;
-        private string connectionString;
-        private bool Debug;
+        private MySQLSettings settings;
 
-        public MySQL(string server, string port, string databasename, string username, string password, 
-            bool debug, Core.GHMattiTaskScheduler taskScheduler)
+        public MySQL(MySQLSettings mysqlSettings, Core.GHMattiTaskScheduler taskScheduler)
         {
-            connectionString = String.Format("SERVER={0};PORT={1};DATABASE={2};UID={3};PASSWORD={4}",
-                server, port, databasename, username, password    
-            );
-            Debug = debug;
+            settings = mysqlSettings;
+            settings.Apply();
             queryScheduler = taskScheduler;
             // Cannot execute that connection in on the server thread, but we need to test if the connection string is actually correct
             // This will cause a hitch if the constructor is not put in a Task on a different thread
-            using (Connection db = new Connection(connectionString)) { }
+            using (Connection db = new Connection(settings.ConnectionString)) { }
         }
 
         public Task<int> Query(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() => 
@@ -33,7 +29,7 @@ namespace GHMatti.MySQL
             System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
             long connectionTime = 0, queryTime = 0;
 
-            using(Connection db = new Connection(connectionString))
+            using(Connection db = new Connection(settings.ConnectionString))
             {
                 timer.Start();
                 db.connection.Open();
@@ -71,7 +67,7 @@ namespace GHMatti.MySQL
             System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
             long connectionTime = 0, queryTime = 0;
 
-            using (Connection db = new Connection(connectionString))
+            using (Connection db = new Connection(settings.ConnectionString))
             {
                 timer.Start();
                 db.connection.Open();
@@ -110,7 +106,7 @@ namespace GHMatti.MySQL
             System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
             long connectionTime = 0, queryTime = 0, readTime = 0;
 
-            using (Connection db = new Connection(connectionString))
+            using (Connection db = new Connection(settings.ConnectionString))
             {
                 timer.Start();
                 db.connection.Open();
@@ -149,15 +145,15 @@ namespace GHMatti.MySQL
 
         private void PrintErrorInformation(MySqlException mysqlEx)
         {
-            if (Debug)
-                CitizenFX.Core.Debug.Write(String.Format("[GHMattiMySQL ERROR] [ERROR] {0}\n{1}", mysqlEx.Message, mysqlEx.StackTrace));
+            if (settings.Debug)
+                CitizenFX.Core.Debug.Write(String.Format("[GHMattiMySQL ERROR] [ERROR] {0}\n{1}\n", mysqlEx.Message, mysqlEx.StackTrace));
             else
                 CitizenFX.Core.Debug.Write(String.Format("[GHMattiMySQL ERROR] {0}\n", mysqlEx.Message));
         }
 
         private void PrintDebugInformation(long ctime, long qtime, long rtime, string query)
         {
-            if(Debug)
+            if(settings.Debug)
                 CitizenFX.Core.Debug.WriteLine(String.Format(
                     "[MySQL Debug] Connection: {0}ms; Query: {1}ms; Read: {2}ms; Total {3}ms for Query: {4}",
                     ctime, qtime, rtime, ctime+qtime+rtime, query

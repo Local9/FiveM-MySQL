@@ -15,13 +15,14 @@ namespace GHMattiMySQL
     public class Core : BaseScript
     {
         private GHMattiTaskScheduler taskScheduler;
-        private Dictionary<string, string> cfg;
         private MySQL mysql;
+        private MySQLSettings settings;
         private bool initialized;
 
         public Core()
         {
             taskScheduler = new GHMattiTaskScheduler();
+            settings = new MySQLSettings();
             initialized = false;
             EventHandlers["onServerResourceStart"] += new Action<string>(Initialization);
 
@@ -54,17 +55,20 @@ namespace GHMattiMySQL
         {
             if (API.GetCurrentResourceName() == resourcename)
             {
+                settings.ConvarConnectionString = API.GetConvar("mysql_connection_string", "");
+                settings.ConvarDebug = API.GetConvar("mysql_debug", "false");
+
                 // You cannot do API Calls in these Threads, you need to do them before or inbetween. Use them only for heavy duty work,
                 // (file operations, database interaction or transformation of data), or when working with an external library.
                 await Task.Factory.StartNew(() =>
                 {
                     XDocument xDocument = XDocument.Load(Path.Combine("resources", resourcename, "settings.xml"));
-                    cfg = xDocument.Descendants("setting").ToDictionary(
+                    settings.XMLConfiguration = xDocument.Descendants("setting").ToDictionary(
                         setting => setting.Attribute("key").Value,
                         setting => setting.Value
                     );
-                    mysql = new MySQL(cfg["MySQL:Server"], cfg["MySQL:Port"], cfg["MySQL:Database"], cfg["MySQL:Username"], cfg["MySQL:Password"],
-                        Convert.ToBoolean(cfg["MySQL:Debug"]), taskScheduler);
+                    settings.Apply();
+                    mysql = new MySQL(settings, taskScheduler);
 
                     initialized = true;
                 }, CancellationToken.None, TaskCreationOptions.None, taskScheduler);
@@ -92,7 +96,7 @@ namespace GHMattiMySQL
         private async void QueryAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.Query(query, Parameters.TryParse(parameters, Convert.ToBoolean(cfg["MySQL:Debug"])));
+            dynamic result = await mysql.Query(query, Parameters.TryParse(parameters, settings.Debug));
             if(callback != null)
             {
                 await Delay(0); // need to wait for the next server tick before invoking, will error otherwise
@@ -103,7 +107,7 @@ namespace GHMattiMySQL
         private async void QueryResultAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.QueryResult(query, Parameters.TryParse(parameters, Convert.ToBoolean(cfg["MySQL:Debug"])));
+            dynamic result = await mysql.QueryResult(query, Parameters.TryParse(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0);
@@ -114,7 +118,7 @@ namespace GHMattiMySQL
         private async void QueryScalarAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.QueryScalar(query, Parameters.TryParse(parameters, Convert.ToBoolean(cfg["MySQL:Debug"])));
+            dynamic result = await mysql.QueryScalar(query, Parameters.TryParse(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0);
