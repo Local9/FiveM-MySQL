@@ -80,10 +80,11 @@ namespace GHMatti.MySQL
                 using (MySqlCommand cmd = db.connection.CreateCommand())
                 {
                     cmd.CommandText = query;
+                    cmd.AddParameters(parameters);
 
-                    timer.Restart();
                     try
                     {
+                        timer.Restart();
                         result = cmd.ExecuteScalar();
                         queryTime = timer.ElapsedMilliseconds;
                     }
