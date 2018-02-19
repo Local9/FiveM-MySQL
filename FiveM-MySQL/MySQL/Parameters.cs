@@ -8,7 +8,7 @@ namespace GHMatti.MySQL
         public static void AddParameters(this MySqlCommand cmd, IDictionary<string, dynamic> parameters)
         {
             if (parameters != null)
-                foreach(KeyValuePair<string, dynamic> kvp in parameters)
+                foreach (KeyValuePair<string, dynamic> kvp in parameters)
                     cmd.Parameters.AddWithValue(kvp.Key, kvp.Value);
         }
 
@@ -21,11 +21,11 @@ namespace GHMatti.MySQL
             }
             catch
             {
-                if(debug)
+                if (debug)
                     CitizenFX.Core.Debug.WriteLine("[GHMattiMySQL Warning] Parameters are not in Dictionary-shape");
                 parsedParameters = null;
             }
-                
+
             return parsedParameters;
         }
     }

@@ -37,7 +37,7 @@ namespace GHMatti.MySQL
                 BuildTableSection(tablename, parametersToParse[0]);
                 BuildValuesSection(parametersToParse);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

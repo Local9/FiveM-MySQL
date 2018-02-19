@@ -23,7 +23,7 @@ namespace GHMatti.MySQL
 
         public void Apply()
         {
-            if(Convert.ToBoolean(xmlConfiguration["MySQL:UseConvars"]))
+            if (Convert.ToBoolean(xmlConfiguration["MySQL:UseConvars"]))
             {
                 debug = Convert.ToBoolean(convarDebug);
                 connectionString = convarConnectionString;

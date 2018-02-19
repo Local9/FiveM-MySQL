@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using GHMatti.Core;
 using GHMatti.MySQL;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -72,7 +71,7 @@ namespace GHMattiMySQL
 
                     initialized = true;
                 }, CancellationToken.None, TaskCreationOptions.None, taskScheduler);
-            }   
+            }
         }
 
         private async Task<int> Query(string query, dynamic parameters)
@@ -97,7 +96,7 @@ namespace GHMattiMySQL
         {
             await Initialized();
             dynamic result = await mysql.Query(query, Parameters.TryParse(parameters, settings.Debug));
-            if(callback != null)
+            if (callback != null)
             {
                 await Delay(0); // need to wait for the next server tick before invoking, will error otherwise
                 callback.Invoke(result);
