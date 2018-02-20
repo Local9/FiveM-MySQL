@@ -4,17 +4,21 @@ using System.Text;
 
 namespace GHMatti.MySQL
 {
+    // MultiRow Parsing Class
     public class MultiRow
     {
-
+        // Return attributes for Command Text and Parameters
         public string CommandText => mysqlCommandText.ToString();
         public IDictionary<string, dynamic> Parameters => mysqlParameters;
 
+        // Actual content, making sure that only this class modifys it
         private StringBuilder mysqlCommandText;
         private Dictionary<string, dynamic> mysqlParameters;
 
+        // Helper list to make sure the user does not provide bad arguments
         private List<string> mysqlColumns;
 
+        // Constructor nothing special
         public MultiRow()
         {
             mysqlCommandText = new StringBuilder();
@@ -22,11 +26,13 @@ namespace GHMatti.MySQL
             mysqlColumns = new List<string>();
         }
 
+        // Actual Function to call to Parse the MultiRow data
         public static MultiRow TryParse(string tablename, dynamic parameters)
         {
             return (new MultiRow()).Parse(tablename, parameters);
         }
 
+        // Parsing Work, just throw in case stuff goes wrong.
         private MultiRow Parse(string tablename, dynamic parameters)
         {
             try
@@ -44,6 +50,7 @@ namespace GHMatti.MySQL
             return this;
         }
 
+        // Create the values section of the INSERT statement
         private void BuildValuesSection(IList<dynamic> parametersToParse)
         {
             uint currentRow = 0, currentColumn = 0;
@@ -74,6 +81,7 @@ namespace GHMatti.MySQL
             mysqlCommandText.Append(";");
         }
 
+        // Creates a parameter name to use
         private string BuildParameterName(string key, uint currentRow)
         {
             StringBuilder stringBuilder = new StringBuilder("@");
@@ -82,6 +90,7 @@ namespace GHMatti.MySQL
             return stringBuilder.ToString();
         }
 
+        // Build the table section of the INSERT statement, also populating the columns List to double check
         private void BuildTableSection(string tablename, dynamic row)
         {
             mysqlCommandText.Append("INSERT INTO ");
@@ -100,12 +109,14 @@ namespace GHMatti.MySQL
             mysqlCommandText.Append(") VALUES ");
         }
 
+        // Function to add the first column in a row to the command text
         private void AppendFirstColumn(string name)
         {
             mysqlCommandText.Append(" (");
             mysqlCommandText.Append(name);
         }
 
+        // Function to add any other column of a row to the command text that is not the first
         private void AppendNotFirstColumn(string name)
         {
             mysqlCommandText.Append(", ");

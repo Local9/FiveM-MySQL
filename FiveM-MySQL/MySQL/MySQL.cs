@@ -7,11 +7,15 @@ using System.Threading.Tasks;
 
 namespace GHMatti.MySQL
 {
+    // MySQL Wrapper Class using a custom task scheduler
     public class MySQL
     {
+        // This is where we store the TaskScheduler
         private Core.GHMattiTaskScheduler queryScheduler;
+        // This contains the settings needed for this wrapper
         private MySQLSettings settings;
 
+        // Constructor, should be called in the task scheduler itself to avoid hitches
         public MySQL(MySQLSettings mysqlSettings, Core.GHMattiTaskScheduler taskScheduler)
         {
             settings = mysqlSettings;
@@ -22,6 +26,7 @@ namespace GHMatti.MySQL
             using (Connection db = new Connection(settings.ConnectionString)) { }
         }
 
+        // This is the ExecuteNonQuery command wrapper
         public Task<int> Query(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
         {
             int result = -1;
@@ -60,6 +65,7 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
+        // This is the ExecuteScalar wrapper
         public Task<dynamic> QueryScalar(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
         {
             dynamic result = null;
@@ -98,7 +104,7 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
-
+        // This is the actual query wrapper where you read from the database more than a singular value
         public Task<MySQLResult> QueryResult(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
         {
             MySQLResult result = new MySQLResult();
@@ -143,6 +149,7 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
+        // Helper function to display MySQL error information
         private void PrintErrorInformation(MySqlException mysqlEx)
         {
             if (settings.Debug)
@@ -151,6 +158,7 @@ namespace GHMatti.MySQL
                 CitizenFX.Core.Debug.Write(String.Format("[GHMattiMySQL ERROR] {0}\n", mysqlEx.Message));
         }
 
+        // Helper function to display MySQL client<->server performance
         private void PrintDebugInformation(long ctime, long qtime, long rtime, string query)
         {
             if (settings.Debug)
