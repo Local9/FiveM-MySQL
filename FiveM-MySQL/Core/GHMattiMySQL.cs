@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using GHMatti.Core;
 using GHMatti.MySQL;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -12,16 +11,20 @@ using System.Xml.Linq;
 
 namespace GHMattiMySQL
 {
+    // BaseScript class as a script for FiveM / CitizenFX that gets called
     public class Core : BaseScript
     {
+        // Private TaskScheduler to not execute on the main thread
         private GHMattiTaskScheduler taskScheduler;
-        private Dictionary<string, string> cfg;
         private MySQL mysql;
+        private MySQLSettings settings;
         private bool initialized;
 
+        // Constructor to set Exports and CitizenFX.Core Handlers
         public Core()
         {
             taskScheduler = new GHMattiTaskScheduler();
+            settings = new MySQLSettings();
             initialized = false;
             EventHandlers["onServerResourceStart"] += new Action<string>(Initialization);
 
@@ -45,65 +48,74 @@ namespace GHMattiMySQL
                 (query, parameters, cb) => QueryScalarAsync(query, parameters, cb))
             );
 
-            Exports.Add("Insert", new Action<string, dynamic>(
-                (table, parameters) => Insert(table, parameters))
+            Exports.Add("Insert", new Action<string, dynamic, CallbackDelegate>(
+                (table, parameters, cb) => Insert(table, parameters, cb))
             );
         }
 
+        // Initialization function. Nothing will execute before this is not done. Maybe remove the async and await?
         private async void Initialization(string resourcename)
         {
             if (API.GetCurrentResourceName() == resourcename)
             {
+                settings.ConvarConnectionString = API.GetConvar("mysql_connection_string", "");
+                settings.ConvarDebug = API.GetConvar("mysql_debug", "false");
+
                 // You cannot do API Calls in these Threads, you need to do them before or inbetween. Use them only for heavy duty work,
                 // (file operations, database interaction or transformation of data), or when working with an external library.
                 await Task.Factory.StartNew(() =>
                 {
                     XDocument xDocument = XDocument.Load(Path.Combine("resources", resourcename, "settings.xml"));
-                    cfg = xDocument.Descendants("setting").ToDictionary(
+                    settings.XMLConfiguration = xDocument.Descendants("setting").ToDictionary(
                         setting => setting.Attribute("key").Value,
                         setting => setting.Value
                     );
-                    mysql = new MySQL(cfg["MySQL:Server"], cfg["MySQL:Port"], cfg["MySQL:Database"], cfg["MySQL:Username"], cfg["MySQL:Password"],
-                        Convert.ToBoolean(cfg["MySQL:Debug"]), taskScheduler);
+                    settings.Apply();
+                    mysql = new MySQL(settings, taskScheduler);
 
                     initialized = true;
                 }, CancellationToken.None, TaskCreationOptions.None, taskScheduler);
-            }   
+            }
         }
 
+        // Implementation of the standard Execute for a Command with a proper reply (rows changed?); so that lua waits for it to complete
         private async Task<int> Query(string query, dynamic parameters)
         {
             await Initialized();
             return await mysql.Query(query, Parameters.TryParse(parameters));
         }
 
+        // Implementation for the standard Query / Result for a command.
         private async Task<MySQLResult> QueryResult(string query, dynamic parameters)
         {
             await Initialized();
             return await mysql.QueryResult(query, Parameters.TryParse(parameters));
         }
 
+        // Implementation for the standard Scalar command, which only returns a singular value
         private async Task<dynamic> QueryScalar(string query, dynamic parameters)
         {
             await Initialized();
             return await mysql.QueryScalar(query, Parameters.TryParse(parameters));
         }
 
+        // Async Implementation of the Execute command. This is way faster than using the Query method
         private async void QueryAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.Query(query, Parameters.TryParse(parameters, Convert.ToBoolean(cfg["MySQL:Debug"])));
-            if(callback != null)
+            dynamic result = await mysql.Query(query, Parameters.TryParse(parameters, settings.Debug));
+            if (callback != null)
             {
                 await Delay(0); // need to wait for the next server tick before invoking, will error otherwise
                 callback.Invoke(result);
             }
         }
 
+        // Async Implementation of the Query command.
         private async void QueryResultAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.QueryResult(query, Parameters.TryParse(parameters, Convert.ToBoolean(cfg["MySQL:Debug"])));
+            dynamic result = await mysql.QueryResult(query, Parameters.TryParse(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0);
@@ -111,10 +123,11 @@ namespace GHMattiMySQL
             }
         }
 
+        // Async Implementation of the Scalar command.
         private async void QueryScalarAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.QueryScalar(query, Parameters.TryParse(parameters, Convert.ToBoolean(cfg["MySQL:Debug"])));
+            dynamic result = await mysql.QueryScalar(query, Parameters.TryParse(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0);
@@ -122,18 +135,26 @@ namespace GHMattiMySQL
             }
         }
 
-        private async void Insert(string table, dynamic parameters)
+        // Insert wrapper for multiple rows, should be able to do single rows too
+        private async void Insert(string table, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
             MultiRow multiRow = await ParseMultiRow(table, parameters);
-            await mysql.Query(multiRow.CommandText, multiRow.Parameters);
+            dynamic result = await mysql.Query(multiRow.CommandText, multiRow.Parameters);
+            if(callback != null)
+            {
+                await Delay(0);
+                callback.Invoke(result);
+            }
         }
 
+        // Parsing MultiRow with the TaskScheduler to avoid hitches
         private async Task<MultiRow> ParseMultiRow(string table, dynamic parameters) => await Task.Factory.StartNew(() =>
         {
             return MultiRow.TryParse(table, parameters);
         }, CancellationToken.None, TaskCreationOptions.None, taskScheduler);
 
+        // Wait until the setup is complete
         private async Task Initialized()
         {
             while (!initialized)
