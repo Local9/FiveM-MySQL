@@ -140,14 +140,9 @@ namespace GHMattiMySQL
         {
             await Initialized();
             MultiRow multiRow = await ParseMultiRow(table, parameters);
-            await mysql.Query(multiRow.CommandText, multiRow.Parameters);
+            dynamic result = await mysql.Query(multiRow.CommandText, multiRow.Parameters);
             if(callback != null)
             {
-                // Ineffective, because the entire thing needs to superseede the Query function
-                // and be completed in the same task, there might be other inserts resulting in a bad reply
-                // move this to the query, not recommended to use at the moment when other inserts could be
-                // happening, thus untested
-                dynamic result = await mysql.QueryScalar("SELECT LAST_INSERT_ID()");
                 await Delay(0);
                 callback.Invoke(result);
             }

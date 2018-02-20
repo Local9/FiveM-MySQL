@@ -1,3 +1,9 @@
+## Version 0.0.4 [ 2018 / 02 / 20 ]
+* Added Multithreading. This speeds up using many database querys quite a bit.
+* Fixed the missing handling of Parameters by QueryScalar[Async].
+* Added support for using Convars instead of definiting the server connection by the `settings.xml`
+* Added an optional Callback to :Insert
+
 ## Version 0.0.3 [ 2018 / 02 / 19 ] 
 * Better Debug Handling: MySQL errors do not lead to throwing and dying of the entire resource, it'll just display the MySQL error.
 * Added Multi-Row Inserts: Basically a CommandText constructor for lazy people.
