@@ -7,5 +7,4 @@
   <setting key="MySQL:Username">ghmatti</setting>
   <setting key="MySQL:Password">password</setting>
   <setting key="MySQL:Debug">true</setting>
-  <setting key="MySQL:ThreadLimit">0</setting>
 </configuration>

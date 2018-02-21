@@ -16,6 +16,10 @@ namespace GHMatti.Core
         private List<BlockingCollection<Task>> tasks = new List<BlockingCollection<Task>>();
         // Number of Threads we will be using
         private int numberOfThreads = 1;
+        // An attribute to limit the usage of threads by the users, to avoid Deadlocks,
+        // because of bad querys and programming.
+        public int ThreadLimit { set => numberOfThreads = GetNumberOfThreads(value); }
+
 
         // Constructor
         public GHMattiTaskScheduler()
@@ -46,22 +50,11 @@ namespace GHMatti.Core
         // therafter for the server thread
         private static int GetNumberOfThreads(int threadLimit = 0)
         {
-            if (threadLimit <= Environment.ProcessorCount && threadLimit > 0)
+            if (threadLimit < Environment.ProcessorCount && threadLimit > 0)
                 return threadLimit;
             if (Environment.ProcessorCount > 2)
                 return Environment.ProcessorCount - 1;
-            else
-                return (Environment.ProcessorCount > 1) ? Environment.ProcessorCount : 1;
-        }
-
-        public void ApplyThreadLimit(int threadLimit = 0)
-        {
-            if (threadLimit < Environment.ProcessorCount && threadLimit > 0)
-                numberOfThreads = threadLimit;
-            if (Environment.ProcessorCount > 2)
-                numberOfThreads = Environment.ProcessorCount - 1;
-            else
-                numberOfThreads = (Environment.ProcessorCount > 1) ? Environment.ProcessorCount : 1;
+            return (Environment.ProcessorCount > 1) ? Environment.ProcessorCount : 1;
         }
 
         // Keep looping the Execution of Tasks forever

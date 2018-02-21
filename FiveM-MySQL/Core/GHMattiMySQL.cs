@@ -60,7 +60,7 @@ namespace GHMattiMySQL
             {
                 settings.ConvarConnectionString = API.GetConvar("mysql_connection_string", "");
                 settings.ConvarDebug = API.GetConvar("mysql_debug", "false");
-
+                taskScheduler.ThreadLimit = API.GetConvarInt("mysql_thread_limit", 0);
                 // You cannot do API Calls in these Threads, you need to do them before or inbetween. Use them only for heavy duty work,
                 // (file operations, database interaction or transformation of data), or when working with an external library.
                 await Task.Factory.StartNew(() =>
@@ -71,7 +71,6 @@ namespace GHMattiMySQL
                         setting => setting.Value
                     );
                     settings.Apply();
-                    taskScheduler.ApplyThreadLimit(settings.ThreadLimit);
                     mysql = new MySQL(settings, taskScheduler);
 
                     initialized = true;
