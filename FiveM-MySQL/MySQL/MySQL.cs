@@ -66,9 +66,9 @@ namespace GHMatti.MySQL
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
         // This is the ExecuteScalar wrapper
-        public Task<dynamic> QueryScalar(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
+        public Task<object> QueryScalar(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
         {
-            dynamic result = null;
+            object result = null;
 
             System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
             long connectionTime = 0, queryTime = 0;
@@ -83,7 +83,7 @@ namespace GHMatti.MySQL
                 {
                     cmd.CommandText = query;
                     cmd.AddParameters(parameters);
-
+                    
                     try
                     {
                         timer.Restart();

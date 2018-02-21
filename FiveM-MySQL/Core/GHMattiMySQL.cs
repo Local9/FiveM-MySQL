@@ -128,7 +128,7 @@ namespace GHMattiMySQL
         private async void QueryScalarAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.QueryScalar(query, Parameters.TryParse(parameters, settings.Debug));
+            object result = await mysql.QueryScalar(query, Parameters.TryParse(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0);
