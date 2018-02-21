@@ -131,7 +131,8 @@ namespace GHMatti.MySQL
                             queryTime = timer.ElapsedMilliseconds;
                             timer.Restart();
                             while (reader.Read())
-                                result.Add(Enumerable.Range(0, reader.FieldCount).ToDictionary(reader.GetName, reader.GetValue));
+                                result.Add(Enumerable.Range(0, reader.FieldCount).ToDictionary(reader.GetName, 
+                                    i => (reader.IsDBNull(i)) ? null : reader.GetValue(i)));
                         }
                         readTime = timer.ElapsedMilliseconds;
                     }

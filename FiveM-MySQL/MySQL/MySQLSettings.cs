@@ -9,6 +9,7 @@ namespace GHMatti.MySQL
         // Public attributes anyone can read
         public string ConnectionString => connectionString;
         public bool Debug => debug;
+        public int ThreadLimit => threadLimit;
 
         // Public attributes to set
         public Dictionary<string, string> XMLConfiguration { set => xmlConfiguration = value; }
@@ -18,6 +19,7 @@ namespace GHMatti.MySQL
         // Actual variables that the class manages
         private string connectionString = "";
         private bool debug = false;
+        private int threadLimit = 0;
 
         // internal xmlConfiguration
         private Dictionary<string, string> xmlConfiguration;
@@ -44,6 +46,7 @@ namespace GHMatti.MySQL
                     xmlConfiguration["MySQL:Username"], xmlConfiguration["MySQL:Password"]
                 );
             }
+            threadLimit = Convert.ToInt32(xmlConfiguration["MySQL:ThreadLimit"]);
         }
     }
 }

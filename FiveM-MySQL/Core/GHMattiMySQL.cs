@@ -71,6 +71,7 @@ namespace GHMattiMySQL
                         setting => setting.Value
                     );
                     settings.Apply();
+                    taskScheduler.ApplyThreadLimit(settings.ThreadLimit);
                     mysql = new MySQL(settings, taskScheduler);
 
                     initialized = true;

@@ -44,12 +44,24 @@ namespace GHMatti.Core
         // Return the amount of Threads we will use. Make this configurable in the future
         // If we got 2 Logical CPUs, we want at least 2 Threads, but we leave one open
         // therafter for the server thread
-        private static int GetNumberOfThreads()
+        private static int GetNumberOfThreads(int threadLimit = 0)
         {
+            if (threadLimit <= Environment.ProcessorCount && threadLimit > 0)
+                return threadLimit;
             if (Environment.ProcessorCount > 2)
                 return Environment.ProcessorCount - 1;
             else
                 return (Environment.ProcessorCount > 1) ? Environment.ProcessorCount : 1;
+        }
+
+        public void ApplyThreadLimit(int threadLimit = 0)
+        {
+            if (threadLimit < Environment.ProcessorCount && threadLimit > 0)
+                numberOfThreads = threadLimit;
+            if (Environment.ProcessorCount > 2)
+                numberOfThreads = Environment.ProcessorCount - 1;
+            else
+                numberOfThreads = (Environment.ProcessorCount > 1) ? Environment.ProcessorCount : 1;
         }
 
         // Keep looping the Execution of Tasks forever
