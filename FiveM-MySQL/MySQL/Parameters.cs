@@ -32,5 +32,14 @@ namespace GHMatti.MySQL
 
             return parsedParameters;
         }
+
+        // Stringify query string for debug information
+        public static string Stringify(this MySqlCommand cmd)
+        {
+            string result = cmd.CommandText;
+            foreach (MySqlParameter parameter in cmd.Parameters)
+                result = result.Replace(parameter.ParameterName, parameter.Value.ToString());
+            return result;
+        }
     }
 }

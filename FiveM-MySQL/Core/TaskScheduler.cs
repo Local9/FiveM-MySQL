@@ -20,7 +20,6 @@ namespace GHMatti.Core
         // because of bad querys and programming.
         public int ThreadLimit { set => numberOfThreads = GetNumberOfThreads(value); }
 
-
         // Constructor
         public GHMattiTaskScheduler()
         {
@@ -60,7 +59,7 @@ namespace GHMatti.Core
         // Keep looping the Execution of Tasks forever
         private void Execute(object internalThreadId)
         {
-            foreach (Task task in tasks[(int) internalThreadId].GetConsumingEnumerable())
+            foreach (Task task in tasks[(int)internalThreadId].GetConsumingEnumerable())
             {
                 TryExecuteTask(task);
             }
@@ -72,7 +71,7 @@ namespace GHMatti.Core
             if (task != null)
             {
                 int internalThreadId = 0;
-                for (int i = 1; i < numberOfThreads ; i++)
+                for (int i = 1; i < numberOfThreads; i++)
                 {
                     if (tasks[i].Count < tasks[internalThreadId].Count)
                         internalThreadId = i;

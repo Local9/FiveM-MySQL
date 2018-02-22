@@ -28,7 +28,7 @@ namespace GHMattiMySQL
             initialized = false;
             EventHandlers["onServerResourceStart"] += new Action<string>(Initialization);
 
-            Exports.Add("Query", new Func<string, dynamic, Task<int>>(
+            Exports.Add("Query", new Func<string, dynamic, Task<long>>(
                 (query, parameters) => Query(query, parameters))
             );
             Exports.Add("QueryResult", new Func<string, dynamic, Task<MySQLResult>>(
@@ -79,7 +79,7 @@ namespace GHMattiMySQL
         }
 
         // Implementation of the standard Execute for a Command with a proper reply (rows changed?); so that lua waits for it to complete
-        private async Task<int> Query(string query, dynamic parameters)
+        private async Task<long> Query(string query, dynamic parameters)
         {
             await Initialized();
             return await mysql.Query(query, Parameters.TryParse(parameters));
@@ -103,7 +103,7 @@ namespace GHMattiMySQL
         private async void QueryAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.Query(query, Parameters.TryParse(parameters, settings.Debug));
+            long result = await mysql.Query(query, Parameters.TryParse(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0); // need to wait for the next server tick before invoking, will error otherwise
@@ -140,7 +140,8 @@ namespace GHMattiMySQL
         {
             await Initialized();
             MultiRow multiRow = await ParseMultiRow(table, parameters);
-            dynamic result = await mysql.Query(multiRow.CommandText, multiRow.Parameters);
+            bool isInsert = (callback == null) ? false : true;
+            dynamic result = await mysql.Query(multiRow.CommandText, multiRow.Parameters, isInsert);
             if(callback != null)
             {
                 await Delay(0);

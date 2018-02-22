@@ -27,9 +27,9 @@ namespace GHMatti.MySQL
         }
 
         // This is the ExecuteNonQuery command wrapper
-        public Task<int> Query(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
+        public Task<long> Query(string query, IDictionary<string, dynamic> parameters = null, bool isInsert = false) => Task.Factory.StartNew(() =>
         {
-            int result = -1;
+            long result = -1;
 
             System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
             long connectionTime = 0, queryTime = 0;
@@ -50,6 +50,12 @@ namespace GHMatti.MySQL
                         timer.Restart();
                         result = cmd.ExecuteNonQuery();
                         queryTime = timer.ElapsedMilliseconds;
+
+                        if (isInsert)
+                            result = cmd.LastInsertedId;
+
+                        if (settings.Debug)
+                            query = cmd.Stringify();
                     }
                 }
                 catch (MySqlException mysqlEx)
@@ -83,12 +89,15 @@ namespace GHMatti.MySQL
                 {
                     cmd.CommandText = query;
                     cmd.AddParameters(parameters);
-                    
+
                     try
                     {
                         timer.Restart();
                         result = cmd.ExecuteScalar();
                         queryTime = timer.ElapsedMilliseconds;
+
+                        if (settings.Debug)
+                            query = cmd.Stringify();
                     }
                     catch (MySqlException mysqlEx)
                     {
@@ -131,8 +140,11 @@ namespace GHMatti.MySQL
                             queryTime = timer.ElapsedMilliseconds;
                             timer.Restart();
                             while (reader.Read())
-                                result.Add(Enumerable.Range(0, reader.FieldCount).ToDictionary(reader.GetName, 
+                                result.Add(Enumerable.Range(0, reader.FieldCount).ToDictionary(reader.GetName,
                                     i => (reader.IsDBNull(i)) ? null : reader.GetValue(i)));
+
+                            if (settings.Debug)
+                                query = cmd.Stringify();
                         }
                         readTime = timer.ElapsedMilliseconds;
                     }
@@ -163,8 +175,8 @@ namespace GHMatti.MySQL
         private void PrintDebugInformation(long ctime, long qtime, long rtime, string query)
         {
             if (settings.Debug)
-                CitizenFX.Core.Debug.WriteLine(String.Format(
-                    "[MySQL Debug] Connection: {0}ms; Query: {1}ms; Read: {2}ms; Total {3}ms for Query: {4}",
+                CitizenFX.Core.Debug.Write(String.Format(
+                    "[MySQL Debug] Connection: {0}ms; Query: {1}ms; Read: {2}ms; Total {3}ms for Query: {4}\n",
                     ctime, qtime, rtime, ctime + qtime + rtime, query
                 ));
         }
