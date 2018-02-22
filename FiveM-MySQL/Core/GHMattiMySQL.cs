@@ -34,7 +34,7 @@ namespace GHMattiMySQL
             Exports.Add("QueryResult", new Func<string, dynamic, Task<MySQLResult>>(
                 (query, parameters) => QueryResult(query, parameters))
             );
-            Exports.Add("QueryScalar", new Func<string, dynamic, Task<dynamic>>(
+            Exports.Add("QueryScalar", new Func<string, dynamic, Task<object>>(
                 (query, parameters) => QueryScalar(query, parameters))
             );
 
