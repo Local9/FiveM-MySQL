@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GHMatti.MySQL
 {
@@ -40,6 +41,22 @@ namespace GHMatti.MySQL
             foreach (MySqlParameter parameter in cmd.Parameters)
                 result = result.Replace(parameter.ParameterName, parameter.Value.ToString());
             return result;
+        }
+
+        // Check if the user supplied queries are in the correct shape
+        public static IList<string> QueryList(dynamic querys)
+        {
+            IList<string> parsedList = null;
+            try
+            {
+                parsedList = ((IList<object>)querys).Select(query => query.ToString()).ToList();
+            }
+            catch
+            {
+                throw new System.Exception("[GHMattiMySQL ERROR] Parameters are not in List-shape");
+            }
+
+            return parsedList;
         }
     }
 }

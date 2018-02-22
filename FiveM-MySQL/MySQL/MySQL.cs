@@ -162,6 +162,57 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
+        // wrapper for transactions
+        public Task<bool> Transaction(IList<string> querys, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
+        {
+            bool result = false;
+
+            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+            long connectionTime = 0, queryTime = 0;
+
+            using (Connection db = new Connection(settings.ConnectionString))
+            {
+                timer.Start();
+                db.connection.Open();
+                connectionTime = timer.ElapsedMilliseconds;
+
+                using (MySqlCommand cmd = db.connection.CreateCommand())
+                {
+                    MySqlTransaction transaction = db.connection.BeginTransaction();
+                    cmd.AddParameters(parameters);
+                    cmd.Transaction = transaction;
+
+                    timer.Restart();
+
+                    try
+                    {
+                        foreach (string query in querys)
+                        {
+                            cmd.CommandText = query;
+                            cmd.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception exception)
+                    {
+                        if (settings.Debug)
+                            CitizenFX.Core.Debug.Write(String.Format("[GHMattiMySQL WARNING] [Failed Transaction] {0}\n{1}\n", exception.Message, exception.StackTrace));
+                        else
+                            CitizenFX.Core.Debug.Write(String.Format("[GHMattiMySQL WARNING] [Failed Transaction] {0}\n", exception.Message));
+                        // Don't try it, throw on failure
+                        transaction.Rollback();
+                    }
+
+                    queryTime = timer.ElapsedMilliseconds;
+                }
+            }
+
+            timer.Stop();
+            PrintDebugInformation(connectionTime, queryTime, 0, "Transaction");
+
+            return result;
+        }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
+
         // Helper function to display MySQL error information
         private void PrintErrorInformation(MySqlException mysqlEx)
         {

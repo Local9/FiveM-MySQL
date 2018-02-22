@@ -48,8 +48,11 @@ namespace GHMattiMySQL
                 (query, parameters, cb) => QueryScalarAsync(query, parameters, cb))
             );
 
-            Exports.Add("Insert", new Action<string, dynamic, CallbackDelegate>(
-                (table, parameters, cb) => Insert(table, parameters, cb))
+            Exports.Add("Insert", new Action<string, dynamic, CallbackDelegate, bool>(
+                (table, parameters, cb, lastinsertid) => Insert(table, parameters, cb, lastinsertid))
+            );
+            Exports.Add("Transaction", new Action<dynamic, dynamic>(
+                (querys, parameters) => Transaction(querys, parameters))
             );
         }
 
@@ -136,17 +139,24 @@ namespace GHMattiMySQL
         }
 
         // Insert wrapper for multiple rows, should be able to do single rows too
-        private async void Insert(string table, dynamic parameters, CallbackDelegate callback = null)
+        private async void Insert(string table, dynamic parameters, CallbackDelegate callback = null, bool lastInsertId = false)
         {
             await Initialized();
             MultiRow multiRow = await ParseMultiRow(table, parameters);
-            bool isInsert = (callback == null) ? false : true;
+            bool isInsert = (callback == null) ? false : lastInsertId;
             dynamic result = await mysql.Query(multiRow.CommandText, multiRow.Parameters, isInsert);
-            if(callback != null)
+            if (callback != null)
             {
                 await Delay(0);
                 callback.Invoke(result);
             }
+        }
+
+        // Wrapper for Transactions
+        private async void Transaction(dynamic querys, dynamic parameters)
+        {
+            await Initialized();
+            await mysql.Transaction(Parameters.QueryList(querys), Parameters.TryParse(parameters));
         }
 
         // Parsing MultiRow with the TaskScheduler to avoid hitches
