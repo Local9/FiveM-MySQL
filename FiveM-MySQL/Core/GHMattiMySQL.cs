@@ -37,6 +37,9 @@ namespace GHMattiMySQL
             Exports.Add("QueryScalar", new Func<string, dynamic, Task<object>>(
                 (query, parameters) => QueryScalar(query, parameters))
             );
+            Exports.Add("TransactionAsync", new Func<dynamic, dynamic, Task<bool>>(
+                (querys, parameters) => Transaction(querys, parameters))
+            );
 
             Exports.Add("QueryAsync", new Action<string, dynamic, CallbackDelegate>(
                 (query, parameters, cb) => QueryAsync(query, parameters, cb))
@@ -47,12 +50,12 @@ namespace GHMattiMySQL
             Exports.Add("QueryScalarAsync", new Action<string, dynamic, CallbackDelegate>(
                 (query, parameters, cb) => QueryScalarAsync(query, parameters, cb))
             );
+            Exports.Add("TransactionAsync", new Action<dynamic, dynamic, CallbackDelegate>(
+                (querys, parameters, cb) => TransactionAsync(querys, parameters, cb))
+            );
 
             Exports.Add("Insert", new Action<string, dynamic, CallbackDelegate, bool>(
                 (table, parameters, cb, lastinsertid) => Insert(table, parameters, cb, lastinsertid))
-            );
-            Exports.Add("Transaction", new Action<dynamic, dynamic>(
-                (querys, parameters) => Transaction(querys, parameters))
             );
         }
 
@@ -144,7 +147,7 @@ namespace GHMattiMySQL
             await Initialized();
             MultiRow multiRow = await ParseMultiRow(table, parameters);
             bool isInsert = (callback == null) ? false : lastInsertId;
-            dynamic result = await mysql.Query(multiRow.CommandText, multiRow.Parameters, isInsert);
+            long result = await mysql.Query(multiRow.CommandText, multiRow.Parameters, isInsert);
             if (callback != null)
             {
                 await Delay(0);
@@ -153,10 +156,22 @@ namespace GHMattiMySQL
         }
 
         // Wrapper for Transactions
-        private async void Transaction(dynamic querys, dynamic parameters)
+        private async Task<bool> Transaction(dynamic querys, dynamic parameters)
         {
             await Initialized();
-            await mysql.Transaction(Parameters.QueryList(querys), Parameters.TryParse(parameters));
+            return await mysql.Transaction(TryParseTransactionQuerys(querys), Parameters.TryParse(parameters));
+        }
+
+        // Async Wrapper for Transactions
+        private async void TransactionAsync(dynamic querys, dynamic parameters, CallbackDelegate callback = null)
+        {
+            await Initialized();
+            bool result = await mysql.Transaction(TryParseTransactionQuerys(querys), Parameters.TryParse(parameters));
+            if (callback != null)
+            {
+                await Delay(0);
+                callback.Invoke(result);
+            }
         }
 
         // Parsing MultiRow with the TaskScheduler to avoid hitches
@@ -170,6 +185,22 @@ namespace GHMattiMySQL
         {
             while (!initialized)
                 await Delay(0);
+        }
+
+        // Check if the user supplied queries are in the correct shape, move this somewhere else later
+        public static System.Collections.Generic.IList<string> TryParseTransactionQuerys(dynamic querys)
+        {
+            System.Collections.Generic.IList<string> parsedList = null;
+            try
+            {
+                parsedList = ((System.Collections.Generic.IList<object>)querys).Select(query => query.ToString()).ToList();
+            }
+            catch
+            {
+                throw new System.Exception("[GHMattiMySQL ERROR] Parameters are not in List-shape");
+            }
+
+            return parsedList;
         }
     }
 }

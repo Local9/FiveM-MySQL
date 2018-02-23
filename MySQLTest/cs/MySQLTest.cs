@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using GHMatti.MySQL;
 using System;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace MySQLTest
 {
@@ -21,21 +23,29 @@ namespace MySQLTest
         {
             if(API.GetCurrentResourceName() == resourcename)
             {
-                mysql = new GHMatti.MySQL.MySQL("localhost", "3306", "fivem", "ghmatti", "password", true, taskScheduler);
+                MySQLSettings settings = new MySQLSettings();
+                settings.ConvarConnectionString = API.GetConvar("mysql_connection_string", "");
+                settings.ConvarDebug = API.GetConvar("mysql_debug", "true");
+                XDocument xDocument = XDocument.Load(Path.Combine("resources", resourcename, "settings.xml"));
+                settings.XMLConfiguration = xDocument.Descendants("setting").ToDictionary(
+                    setting => setting.Attribute("key").Value,
+                    setting => setting.Value
+                );
+                mysql = new MySQL(settings, taskScheduler);
                 ExecuteQueries(resourcename);
             }
         }
 
         private async void ExecuteQueries(string resourcename)
         {
-            await Delay(30000);
+            //await Delay(60000);
             string line;
             System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
             StreamReader file = new StreamReader(Path.Combine("resources",resourcename,"sql","MySQLTest.sql"));
             timer.Start();
             while ((line = file.ReadLine()) != null)
             {
-                Task t = mysql.Query(line);
+                await mysql.Query(line);
             }
             timer.Stop();
             file.Close();

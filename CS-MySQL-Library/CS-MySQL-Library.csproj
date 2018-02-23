@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B9B0DF87-CB6E-4463-BD4B-FE8D64DF874E}</ProjectGuid>
+    <ProjectGuid>{3A76409D-0A04-4C42-ABAE-E1CC17B96325}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MySQLTest</RootNamespace>
-    <AssemblyName>MySQLTest.net</AssemblyName>
+    <RootNamespace>CSMySQLLibrary</RootNamespace>
+    <AssemblyName>CSMySQLLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -53,33 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="cs\MySQLTest.cs" />
+    <Compile Include="Core\TaskScheduler.cs" />
+    <Compile Include="MySQL\Connection.cs" />
+    <Compile Include="MySQL\MultiRow.cs" />
+    <Compile Include="MySQL\MySQL.cs" />
+    <Compile Include="MySQL\MySQLResult.cs" />
+    <Compile Include="MySQL\MySQLSettings.cs" />
+    <Compile Include="MySQL\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="cs\settings.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resource\sql\MySQLTest.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CS-MySQL-Library\CS-MySQL-Library.csproj">
-      <Project>{3a76409d-0a04-4c42-abae-e1cc17b96325}</Project>
-      <Name>CS-MySQL-Library</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="resource\MySQLTest.lua">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resource\__resource.lua">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
