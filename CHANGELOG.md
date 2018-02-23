@@ -1,3 +1,11 @@
+## Version 0.5.0 [ 2018 / 02 / 23 ]
+* Insert now has another optional parameter, to indicate if it should return the last inserted id by the statement. The id needs to be an auto incrementing value.
+* Added an optional console variable / convar `mysql_thread_limit`, which can be set in the server.cfg if you want to limit or control multithreading better.
+* Fixed an bug where QueryScalar[Async] would crash the resource when it returned null, as the server tries to unwrap nothing. Do not use dynamic and send null with it folks.
+* Added Transactions.
+* Changed so Debug mode would show querys stringified. Not correctly, but probably enough to debug your queries.
+* Jumped the Version, because I am almost out of ideas to add.
+
 ## Version 0.0.4 [ 2018 / 02 / 20 ]
 * Added Multithreading. This speeds up using many database querys quite a bit.
 * Fixed the missing handling of Parameters by QueryScalar[Async].

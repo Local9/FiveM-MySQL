@@ -5,11 +5,12 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("GHMattiMySQL")]
-[assembly: AssemblyDescription("A MySQL Library for FiveM without Hitches")]
+[assembly: AssemblyTitle("CS-MySQL-Library")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("Copyright © GHMatti 2018")]
+[assembly: AssemblyProduct("CS-MySQL-Library")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-[assembly: Guid("cf04e9fa-50c4-469a-9619-5acece2be099")]
+[assembly: Guid("3a76409d-0a04-4c42-abae-e1cc17b96325")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //

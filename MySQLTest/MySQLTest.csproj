@@ -53,20 +53,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="cs\Core\TaskScheduler.cs" />
     <Compile Include="cs\MySQLTest.cs" />
-    <Compile Include="cs\MySQL\Connection.cs" />
-    <Compile Include="cs\MySQL\MySQL.cs" />
-    <Compile Include="cs\MySQL\MySQLResult.cs" />
-    <Compile Include="cs\MySQL\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="cs\settings.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="resource\sql\MySQLTest.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CS-MySQL-Library\CS-MySQL-Library.csproj">
+      <Project>{3a76409d-0a04-4c42-abae-e1cc17b96325}</Project>
+      <Name>CS-MySQL-Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CF04E9FA-50C4-469A-9619-5ACECE2BE099}</ProjectGuid>
+    <ProjectGuid>{3A76409D-0A04-4C42-ABAE-E1CC17B96325}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GHMatti</RootNamespace>
-    <AssemblyName>GHMattiMySQL.net</AssemblyName>
+    <RootNamespace>CSMySQLLibrary</RootNamespace>
+    <AssemblyName>CSMySQLLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -54,34 +54,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\TaskScheduler.cs" />
-    <Compile Include="Core\GHMattiMySQL.cs" />
-    <Compile Include="MySQL\MySQLSettings.cs" />
     <Compile Include="MySQL\Connection.cs" />
     <Compile Include="MySQL\MultiRow.cs" />
     <Compile Include="MySQL\MySQL.cs" />
     <Compile Include="MySQL\MySQLResult.cs" />
+    <Compile Include="MySQL\MySQLSettings.cs" />
     <Compile Include="MySQL\Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="resource\__resource.lua">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="resource\settings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>COPY /Y "$(TargetPath)" "$(TargetDir)resource"
-COPY /Y "$(TargetDir)MySqlConnector.dll" "$(TargetDir)resource"
-COPY /Y "$(TargetDir)System.Buffers.dll" "$(TargetDir)resource"
-COPY /Y "$(TargetDir)System.Threading.Tasks.Extensions.dll" "$(TargetDir)resource"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
