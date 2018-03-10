@@ -4,21 +4,31 @@ using System.Text;
 
 namespace GHMatti.MySQL
 {
-    // MultiRow Parsing Class
+    /// <summary>
+    /// MultiRow Parsing Class
+    /// </summary>
     public class MultiRow
     {
-        // Return attributes for Command Text and Parameters
+        /// <summary>
+        /// Return attributes for Command Text and Parameters
+        /// </summary>
         public string CommandText => mysqlCommandText.ToString();
         public IDictionary<string, dynamic> Parameters => mysqlParameters;
 
-        // Actual content, making sure that only this class modifys it
+        /// <summary>
+        /// Actual content, making sure that only this class modifys it
+        /// </summary>
         private StringBuilder mysqlCommandText;
         private Dictionary<string, dynamic> mysqlParameters;
 
-        // Helper list to make sure the user does not provide bad arguments
+        /// <summary>
+        /// Helper list to make sure the user does not provide bad arguments
+        /// </summary>
         private List<string> mysqlColumns;
 
-        // Constructor nothing special
+        /// <summary>
+        /// Constructor nothing special
+        /// </summary>
         public MultiRow()
         {
             mysqlCommandText = new StringBuilder();
@@ -26,13 +36,23 @@ namespace GHMatti.MySQL
             mysqlColumns = new List<string>();
         }
 
-        // Actual Function to call to Parse the MultiRow data
+        /// <summary>
+        /// Actual Function to call to Parse the MultiRow data
+        /// </summary>
+        /// <param name="tablename">name of the table that is inserted into</param>
+        /// <param name="parameters">List of dictionarys presenting the rows to be inserted</param>
+        /// <returns></returns>
         public static MultiRow TryParse(string tablename, dynamic parameters)
         {
             return (new MultiRow()).Parse(tablename, parameters);
         }
 
-        // Parsing Work, just throw in case stuff goes wrong.
+        /// <summary>
+        /// Parsing Work, just throw in case stuff goes wrong.
+        /// </summary>
+        /// <param name="tablename">name of the table</param>
+        /// <param name="parameters">List of dictionarys presenting the rows to be inserted</param>
+        /// <returns>this multirow object</returns>
         private MultiRow Parse(string tablename, dynamic parameters)
         {
             try
@@ -50,7 +70,10 @@ namespace GHMatti.MySQL
             return this;
         }
 
-        // Create the values section of the INSERT statement
+        /// <summary>
+        /// Create the values section of the INSERT statement
+        /// </summary>
+        /// <param name="parametersToParse">List of dictionaries that represent the rows to be inserted</param>
         private void BuildValuesSection(IList<dynamic> parametersToParse)
         {
             uint currentRow = 0, currentColumn = 0;
@@ -81,7 +104,12 @@ namespace GHMatti.MySQL
             mysqlCommandText.Append(";");
         }
 
-        // Creates a parameter name to use
+        /// <summary>
+        /// Creates a parameter name to use
+        /// </summary>
+        /// <param name="key">column name</param>
+        /// <param name="currentRow">number of the row</param>
+        /// <returns>Parameter name</returns>
         private string BuildParameterName(string key, uint currentRow)
         {
             StringBuilder stringBuilder = new StringBuilder("@");
@@ -90,7 +118,11 @@ namespace GHMatti.MySQL
             return stringBuilder.ToString();
         }
 
-        // Build the table section of the INSERT statement, also populating the columns List to double check
+        /// <summary>
+        /// Build the table section of the INSERT statement, also populating the columns List to double check
+        /// </summary>
+        /// <param name="tablename">name of the table that is inserted into</param>
+        /// <param name="row">first row in dictionary form</param>
         private void BuildTableSection(string tablename, dynamic row)
         {
             mysqlCommandText.Append("INSERT INTO ");
@@ -109,14 +141,20 @@ namespace GHMatti.MySQL
             mysqlCommandText.Append(") VALUES ");
         }
 
-        // Function to add the first column in a row to the command text
+        /// <summary>
+        /// Function to add the first column in a row to the command text
+        /// </summary>
+        /// <param name="name">column name</param>
         private void AppendFirstColumn(string name)
         {
             mysqlCommandText.Append(" (");
             mysqlCommandText.Append(name);
         }
 
-        // Function to add any other column of a row to the command text that is not the first
+        /// <summary>
+        /// Function to add any other column of a row to the command text that is not the first
+        /// </summary>
+        /// <param name="name">column name</param>
         private void AppendNotFirstColumn(string name)
         {
             mysqlCommandText.Append(", ");

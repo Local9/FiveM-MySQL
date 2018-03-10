@@ -3,10 +3,16 @@ using System.Collections.Generic;
 
 namespace GHMatti.MySQL
 {
-    // Parameter handling class for the MySQL implementation
+    /// <summary>
+    /// Parameter handling class for the MySQL implementation
+    /// </summary>
     public static class Parameters
     {
-        // Extension to the MySqlCommand class to add all Parameters in a Dictionary directly
+        /// <summary>
+        /// Extension to the MySqlCommand class to add all Parameters in a Dictionary directly
+        /// </summary>
+        /// <param name="cmd">Extension variable</param>
+        /// <param name="parameters">Parameters to add</param>
         public static void AddParameters(this MySqlCommand cmd, IDictionary<string, dynamic> parameters)
         {
             if (parameters != null)
@@ -14,7 +20,12 @@ namespace GHMatti.MySQL
                     cmd.Parameters.AddWithValue(kvp.Key, kvp.Value);
         }
 
-        // Check if the user supplied parameters are in the correct shape
+        /// <summary>
+        /// Check if the user supplied parameters are in the correct shape
+        /// </summary>
+        /// <param name="parameters">Parameters to parse</param>
+        /// <param name="debug">if true write a warning for incorrectly-shaped parameters</param>
+        /// <returns>Parameters in dictionary form parsed</returns>
         public static IDictionary<string, dynamic> TryParse(dynamic parameters, bool debug = true)
         {
             IDictionary<string, dynamic> parsedParameters = null;
@@ -33,7 +44,11 @@ namespace GHMatti.MySQL
             return parsedParameters;
         }
 
-        // Stringify query string for debug information
+        /// <summary>
+        /// Stringify query string for debug information
+        /// </summary>
+        /// <param name="cmd">The MysqlCommand</param>
+        /// <returns>Returns the MysqlCommand stringified</returns>
         public static string Stringify(this MySqlCommand cmd)
         {
             string result = cmd.CommandText;

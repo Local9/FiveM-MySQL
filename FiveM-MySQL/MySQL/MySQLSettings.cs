@@ -3,32 +3,48 @@ using System.Collections.Generic;
 
 namespace GHMatti.MySQL
 {
-    // Class to handle the settings for MySQL
+    /// <summary>
+    /// Class to handle the settings for MySQL
+    /// </summary>
     public class MySQLSettings
     {
-        // Public attributes anyone can read
+        /// <summary>
+        /// Public attributes anyone can read
+        /// </summary>
         public string ConnectionString => connectionString;
         public bool Debug => debug;
 
-        // Public attributes to set
+        /// <summary>
+        /// Public attributes to set
+        /// </summary>
         public Dictionary<string, string> XMLConfiguration { set => xmlConfiguration = value; }
         public string ConvarConnectionString { set => convarConnectionString = value; }
         public string ConvarDebug { set => convarDebug = value; }
 
-        // Actual variables that the class manages
+        /// <summary>
+        /// Actual variables that the class manages
+        /// </summary>
         private string connectionString = "";
         private bool debug = false;
 
-        // internal xmlConfiguration
+        /// <summary>
+        /// internal xmlConfiguration
+        /// </summary>
         private Dictionary<string, string> xmlConfiguration;
-        // internal convar variables
+        /// <summary>
+        /// internal convar variables
+        /// </summary>
         private string convarDebug = "";
         private string convarConnectionString = "";
 
-        // empty constructor, got nothing to do
+        /// <summary>
+        /// empty constructor, got nothing to do
+        /// </summary>
         public MySQLSettings() { }
 
-        // Apply the configuration from the internal variables to the actual variables
+        /// <summary>
+        /// Apply the configuration from the internal variables to the actual variables
+        /// </summary>
         public void Apply()
         {
             if (Convert.ToBoolean(xmlConfiguration["MySQL:UseConvars"]))

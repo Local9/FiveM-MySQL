@@ -7,15 +7,25 @@ using System.Threading.Tasks;
 
 namespace GHMatti.MySQL
 {
-    // MySQL Wrapper Class using a custom task scheduler
+    /// <summary>
+    /// MySQL Wrapper Class using a custom task scheduler
+    /// </summary>
     public class MySQL
     {
-        // This is where we store the TaskScheduler
+        /// <summary>
+        /// This is where we store the TaskScheduler
+        /// </summary>
         private Core.GHMattiTaskScheduler queryScheduler;
-        // This contains the settings needed for this wrapper
+        /// <summary>
+        /// This contains the settings needed for this wrapper
+        /// </summary>
         private MySQLSettings settings;
 
-        // Constructor, should be called in the task scheduler itself to avoid hitches
+        /// <summary>
+        /// Constructor, should be called in the task scheduler itself to avoid hitches
+        /// </summary>
+        /// <param name="mysqlSettings"></param>
+        /// <param name="taskScheduler"></param>
         public MySQL(MySQLSettings mysqlSettings, Core.GHMattiTaskScheduler taskScheduler)
         {
             settings = mysqlSettings;
@@ -26,7 +36,13 @@ namespace GHMatti.MySQL
             using (Connection db = new Connection(settings.ConnectionString)) { }
         }
 
-        // This is the ExecuteNonQuery command wrapper
+        /// <summary>
+        /// This is the ExecuteNonQuery command wrapper
+        /// </summary>
+        /// <param name="query">Query string</param>
+        /// <param name="parameters">Parameters in dictionary form</param>
+        /// <param name="isInsert">If true, then the return value will be the last inserted id</param>
+        /// <returns>rows affected</returns>
         public Task<long> Query(string query, IDictionary<string, dynamic> parameters = null, bool isInsert = false) => Task.Factory.StartNew(() =>
         {
             long result = -1;
@@ -71,7 +87,12 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
-        // This is the ExecuteScalar wrapper
+        /// <summary>
+        /// This is the ExecuteScalar wrapper
+        /// </summary>
+        /// <param name="query">Query string</param>
+        /// <param name="parameters">Parameters in dictionary form</param>
+        /// <returns>A singular value selected, like SELECT 1; => 1</returns>
         public Task<object> QueryScalar(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
         {
             object result = null;
@@ -113,7 +134,12 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
-        // This is the actual query wrapper where you read from the database more than a singular value
+        /// <summary>
+        /// This is the actual query wrapper where you read from the database more than a singular value
+        /// </summary>
+        /// <param name="query">Query string</param>
+        /// <param name="parameters">Parameters in dictionary form</param>
+        /// <returns>Result of the Query, List of rows containing dictionarys representing each row</returns>
         public Task<MySQLResult> QueryResult(string query, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
         {
             MySQLResult result = new MySQLResult();
@@ -162,7 +188,12 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
-        // wrapper for transactions
+        /// <summary>
+        /// wrapper for transactions
+        /// </summary>
+        /// <param name="querys">List of query strings</param>
+        /// <param name="parameters">Dictionary of parameters which count for all transactions</param>
+        /// <returns>true or false depending on whether the transaction succeeded or not</returns>
         public Task<bool> Transaction(IList<string> querys, IDictionary<string, dynamic> parameters = null) => Task.Factory.StartNew(() =>
         {
             bool result = false;
@@ -216,7 +247,10 @@ namespace GHMatti.MySQL
             return result;
         }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
 
-        // Helper function to display MySQL error information
+        /// <summary>
+        /// Helper function to display MySQL error information
+        /// </summary>
+        /// <param name="mysqlEx">The MySqlException thrown</param>
         private void PrintErrorInformation(MySqlException mysqlEx)
         {
             if (settings.Debug)
@@ -225,7 +259,13 @@ namespace GHMatti.MySQL
                 CitizenFX.Core.Debug.Write(String.Format("[GHMattiMySQL ERROR] {0}\n", mysqlEx.Message));
         }
 
-        // Helper function to display MySQL client<->server performance
+        /// <summary>
+        /// Helper function to display MySQL client<->server performance
+        /// </summary>
+        /// <param name="ctime">Connection time</param>
+        /// <param name="qtime">Query time</param>
+        /// <param name="rtime">Read time</param>
+        /// <param name="query">MySqlCommand text</param>
         private void PrintDebugInformation(long ctime, long qtime, long rtime, string query)
         {
             if (settings.Debug)
