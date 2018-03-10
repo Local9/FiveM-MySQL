@@ -1,3 +1,7 @@
+## Version 0.5.1 [ 2018 / 03 / 10 ]
+* Updated to MySqlConnector 0.36.1
+* Added a Drag and Drop Replacer for `mysql-async`
+
 ## Version 0.5.0 [ 2018 / 02 / 23 ]
 * Insert now has another optional parameter, to indicate if it should return the last inserted id by the statement. The id needs to be an auto incrementing value.
 * Added an optional console variable / convar `mysql_thread_limit`, which can be set in the server.cfg if you want to limit or control multithreading better.
