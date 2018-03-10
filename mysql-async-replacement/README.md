@@ -2,7 +2,7 @@
 I do not support or condone the use of these files, it is just there because people have had repeatedly problems with mysql-async; and it is difficult for many of them to switch to a different mysql resource.
 
 ## Warning
-I will neither help or support using this to overwrite the resource files. This is but a temporary solution, you **should** be using the exports given by `GHMattiMySQL` directly by the resource.
+I will neither help or support using this to overwrite the resource files. This is but a temporary solution, you **should** be using the exports given directly by the `GHMattiMySQL` resource.
 
 # Instructions
 * Move the GHMattiMySQL resource to your resources from this release
