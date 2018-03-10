@@ -1,4 +1,5 @@
 -- Replacement for mysql-async/lib/MySQL.lua
+-- Based on brouznouf's similar file.
 
 MySQL = {
     Async = {},
