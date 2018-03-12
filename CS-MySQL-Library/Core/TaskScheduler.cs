@@ -7,20 +7,32 @@ using System.Threading.Tasks;
 
 namespace GHMatti.Core
 {
-    // Task Scheduler Replacement Class, so we do not have to Block the Server Thread
+    /// <summary>
+    /// Task Scheduler Replacement Class, so we do not have to Block the Server Thread
+    /// </summary>
     public sealed class GHMattiTaskScheduler : TaskScheduler, IDisposable
     {
-        // List to store all threads
+        /// <summary>
+        /// List to store all threads
+        /// </summary>
         private List<Thread> threads = new List<Thread>();
-        // List to Store all Task Lists / Stacks
+        /// <summary>
+        /// List to Store all Task Lists / Stacks
+        /// </summary>
         private List<BlockingCollection<Task>> tasks = new List<BlockingCollection<Task>>();
-        // Number of Threads we will be using
+        /// <summary>
+        /// Number of Threads we will be using
+        /// </summary>
         private int numberOfThreads = 1;
-        // An attribute to limit the usage of threads by the users, to avoid Deadlocks,
-        // because of bad querys and programming.
+        /// <summary>
+        /// An attribute to limit the usage of threads by the users, to avoid Deadlocks,
+        /// because of bad querys and programming.
+        /// </summary>
         public int ThreadLimit { set => numberOfThreads = GetNumberOfThreads(value); }
 
-        // Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GHMattiTaskScheduler()
         {
             numberOfThreads = GetNumberOfThreads();
@@ -37,16 +49,22 @@ namespace GHMatti.Core
             }
         }
 
-        // Will be called because of IDisposable
+        /// <summary>
+        /// Will be called because of IDisposable
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        // Return the amount of Threads we will use. Make this configurable in the future
-        // If we got 2 Logical CPUs, we want at least 2 Threads, but we leave one open
-        // therafter for the server thread
+        /// <summary>
+        /// Return the amount of Threads we will use. Make this configurable in the future
+        /// If we got 2 Logical CPUs, we want at least 2 Threads, but we leave one open
+        /// therafter for the server thread
+        /// </summary>
+        /// <param name="threadLimit">Limit the amount of threads used</param>
+        /// <returns></returns>
         private static int GetNumberOfThreads(int threadLimit = 0)
         {
             if (threadLimit < Environment.ProcessorCount && threadLimit > 0)
@@ -56,7 +74,10 @@ namespace GHMatti.Core
             return (Environment.ProcessorCount > 1) ? Environment.ProcessorCount : 1;
         }
 
-        // Keep looping the Execution of Tasks forever
+        /// <summary>
+        /// Keep looping the Execution of Tasks forever
+        /// </summary>
+        /// <param name="internalThreadId">The threadschedulers internal thread id</param>
         private void Execute(object internalThreadId)
         {
             foreach (Task task in tasks[(int)internalThreadId].GetConsumingEnumerable())
@@ -65,7 +86,10 @@ namespace GHMatti.Core
             }
         }
 
-        // Find the thread with the lowest amount of tasks and add the new task there
+        /// <summary>
+        /// Find the thread with the lowest amount of tasks and add the new task there
+        /// </summary>
+        /// <param name="task">Task that is supposed to be queued</param>
         protected override void QueueTask(Task task)
         {
             if (task != null)
@@ -80,7 +104,10 @@ namespace GHMatti.Core
             }
         }
 
-        // Call to Dispose
+        /// <summary>
+        /// Call to Dispose
+        /// </summary>
+        /// <param name="dispose">bool, if we want to dispose the scheduler</param>
         private void Dispose(bool dispose)
         {
             if (dispose)
@@ -93,7 +120,10 @@ namespace GHMatti.Core
             }
         }
 
-        // Return a List of all Tasks currently still being handled
+        /// <summary>
+        /// Return a List of all Tasks currently still being handled
+        /// </summary>
+        /// <returns>The list of Tasks that are currently queued to be executed on all threads</returns>
         protected override IEnumerable<Task> GetScheduledTasks()
         {
             IEnumerable<Task> taskList = tasks[0].ToArray();
@@ -104,7 +134,12 @@ namespace GHMatti.Core
             return taskList;
         }
 
-        // We don't allow inline execution
+        /// <summary>
+        /// We don't allow inline execution
+        /// </summary>
+        /// <param name="task">The task that should be executed inline</param>
+        /// <param name="wasQueued">If the task was queued already by the taskscheduler</param>
+        /// <returns>false, task was not executed inline</returns>
         protected override bool TryExecuteTaskInline(Task task, bool wasQueued)
         {
             return false;

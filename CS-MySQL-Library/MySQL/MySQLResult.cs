@@ -2,6 +2,8 @@
 
 namespace GHMatti.MySQL
 {
-    // Renaming the Result from Queries to something shorter
+    /// <summary>
+    /// Renaming the Result from Queries to something shorter
+    /// </summary>
     public class MySQLResult : List<Dictionary<string, dynamic>> { }
 }
