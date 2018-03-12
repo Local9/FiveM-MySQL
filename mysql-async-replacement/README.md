@@ -15,6 +15,6 @@ I will neither help or support using this to overwrite the resource files. This 
 * Remove `start mysql-async`
 * Add `start GHMattiMySQL` at best at the very first position of all starts.
 
-# Known Issues:
+# Known Issues
 * Insert does not return the last inserted id, but affected rows. If you want that behaviour use the different Insert syntax from `GHMattiMySQL`
 * The `mysql-async` implementation was far more forgiving on mysql queries (because of some not recommended settings). If you fuck up or use bad code, it is very likely that you will be confronted with errors and server crashes.

@@ -1,3 +1,6 @@
+## Version 0.5.2 [ 2018 / 03 / 12 ]
+* Fixed an urgent bug where QueryScalar would not return null on System.DBNull
+
 ## Version 0.5.1 [ 2018 / 03 / 10 ]
 * Updated to MySqlConnector 0.36.1
 * Added a Drag and Drop Replacer for `mysql-async`

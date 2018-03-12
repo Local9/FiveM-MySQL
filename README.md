@@ -1,11 +1,15 @@
 # GHMattiMySQL
 Another MySQL implementation for FiveM's FXServer with Multithreading.
 
+## Download
+https://github.com/GHMatti/FiveM-MySQL/releases
+
 ## How to use in your resource?
 * Add into the relevant `__resource.lua` the following line: `dependency 'GHMattiMySQL'`
 * Configure the Resource by editing the `settings.xml` sensibly.
 * If you want to use convars, the convars in the server.cfg you have to set are `mysql_connection_string` to a connection string like `"server=localhost;database=fivem;userid=ghmatti;password=password"` and `mysql_debug`
 * Use `exports` to query your Database
+* If you are coming from mysql-async, you can replace your files by following [these instructions](https://github.com/GHMatti/FiveM-MySQL/tree/master/mysql-async-replacement).
 
 ## Exports
 ### Sync Exports
@@ -29,3 +33,14 @@ Async exports do not wait for the result to be returned, thus they do not return
 * **2018/02/20** *Version: 0.0.4:* Multi-Threading, Support for Convars, Fixed missing Parameter handling on the Scalar function.
 * **2018/02/23** *Version: 0.5.0:* Added returning of Last Insert Id on Inserts via an optional parameter setting, limiting of thread usage, fixed a bug introduced by using dynamic instead of object, transactions, stringified debug querys with parameters, and jumped versions because I can.
 * **2018/03/10** *Version: 0.5.1:* Updated MySqlConnector to 0.36.1, Changed the License to AGPL (if you change something and use it, share it), Added a Drag and Drop Replacer for mysql-async, which is not recommended to use.
+* **2018/03/12** *Version: 0.5.2:* Fixed a Bug where QueryScalar would not return null on System.DBNull; Thanks to @Scyar_Gameur
+
+## FAQ
+* *Don't there have to be exports specified in the `__resource.lua`?*: No! C# is special.
+* *What about until the MySQL stuff is ready?*: It waits automatically. So not needed.
+
+## Thanks to
+* @Frazzle, @Demonen, @Syntasu, @justcfx2u for helpful discussions and feedback; this wouldn't have progressed that fast without you.
+
+## Known "Issues"
+* Using a Sync Query in an Async Callback will cause issues. **You shouldn't be doing that in the first place.** You either program a thread in sync or in async not both. Both get executed by GHMattiMySQL async anyways, Sync only means that the lua script is waiting there for the execution of your sync call.
