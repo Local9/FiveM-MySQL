@@ -1,4 +1,4 @@
 Citizen.CreateThread(function()
-	TriggerEvent("GHMattiMySQLStarted")
-	TriggerEvent("onMySQLReady")
+    TriggerEvent("GHMattiMySQLStarted")
+    TriggerEvent("onMySQLReady")
 end)
