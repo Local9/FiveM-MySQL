@@ -1,3 +1,6 @@
+## Version 0.5.3 [ 2018 / 03 / 13 ]
+* Fixed an even more urgent bug introduced by the bugfix yesterday.
+
 ## Version 0.5.2 [ 2018 / 03 / 12 ]
 * Fixed an urgent bug where QueryScalar would not return null on System.DBNull
 

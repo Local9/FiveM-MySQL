@@ -34,6 +34,7 @@ Async exports do not wait for the result to be returned, thus they do not return
 * **2018/02/23** *Version: 0.5.0:* Added returning of Last Insert Id on Inserts via an optional parameter setting, limiting of thread usage, fixed a bug introduced by using dynamic instead of object, transactions, stringified debug querys with parameters, and jumped versions because I can.
 * **2018/03/10** *Version: 0.5.1:* Updated MySqlConnector to 0.36.1, Changed the License to AGPL (if you change something and use it, share it), Added a Drag and Drop Replacer for mysql-async, which is not recommended to use.
 * **2018/03/12** *Version: 0.5.2:* Fixed a Bug where QueryScalar would not return null on System.DBNull; Thanks to @Scyar_Gameur
+* **2018/03/13** *Version: 0.5.3:* Bugfixed the Bugfix; Thanks to @justcfx2u
 
 ## FAQ
 * *Don't there have to be exports specified in the `__resource.lua`?*: No! C# is special.

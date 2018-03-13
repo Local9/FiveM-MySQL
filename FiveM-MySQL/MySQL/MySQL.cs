@@ -116,7 +116,7 @@ namespace GHMatti.MySQL
                         timer.Restart();
                         result = cmd.ExecuteScalar();
                         queryTime = timer.ElapsedMilliseconds;
-                        if (result.GetType() == typeof(DBNull))
+                        if (result != null && result.GetType() == typeof(DBNull))
                             result = null;
 
                         if (settings.Debug)
