@@ -1,6 +1,4 @@
-AddEventHandler("onServerResourceStart", function(resourceName)
-	if(resourceName == GetCurrentResourceName()) then
-		TriggerEvent("GHMattiMySQLStarted")
-		TriggerEvent("onMySQLReady")
-	end
+Citizen.CreateThread(function()
+	TriggerEvent("GHMattiMySQLStarted")
+	TriggerEvent("onMySQLReady")
 end)
