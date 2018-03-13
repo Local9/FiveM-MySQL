@@ -5,7 +5,7 @@ I do not support or condone the use of these files, it is just there because peo
 I will neither help or support using this to overwrite the resource files. This is but a temporary solution, you **should** be using the exports given directly by the `GHMattiMySQL` resource.
 
 # Instructions
-* Move the `GHMattiMySQL` resource to your resources folder from the release section of this repository.
+* Move the `GHMattiMySQL` resource to your resources folder after downloading it from the [release section](https://github.com/GHMatti/FiveM-MySQL/releases) of this repository.
 * Copy and Paste the content of this folder, except this file, to your servers resources folder; overwrite all files.
 * Remove all `dependency 'mysql-async'` from your `__resource.lua` files, it might not be needed.
 * Edit the `server.cfg`
