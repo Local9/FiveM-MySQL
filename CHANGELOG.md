@@ -1,3 +1,9 @@
+## Version 0.6.0 [ 2018 / 03 / 21 ]
+* Major Code refactoring
+* Stability increased a lot (at least for me)
+* Branched out different components
+* Updated to a custom MySqlConnector 0.37.1
+
 ## Version 0.5.3 [ 2018 / 03 / 13 ]
 * Fixed an even more urgent bug introduced by the bugfix yesterday.
 

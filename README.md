@@ -35,7 +35,7 @@ Async exports do not wait for the result to be returned, thus they do not return
 * **2018/03/10** *Version: 0.5.1:* Updated MySqlConnector to 0.36.1, Changed the License to AGPL (if you change something and use it, share it), Added a Drag and Drop Replacer for mysql-async, which is not recommended to use.
 * **2018/03/12** *Version: 0.5.2:* Fixed a Bug where QueryScalar would not return null on System.DBNull; Thanks to @Scyar_Gameur
 * **2018/03/13** *Version: 0.5.3:* Bugfixed the Bugfix; Thanks to @justcfx2u
-* **2018/03/21** *Version: 0.6.0:* Major code refactoring, possibly increased the stability by a lot, branched out components.
+* **2018/03/21** *Version: 0.6.0:* Major code refactoring, possibly increased the stability by a lot, branched out components, Updated to a custom MySqlConnector 0.37.1
 
 ## FAQ
 * *Don't there have to be exports specified in the `__resource.lua`?*: No! C# is special.
