@@ -1,12 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 
-namespace GHMatti.MySQL
+namespace GHMatti.MySQL.Utilities
 {
     /// <summary>
-    /// Parameter handling class for the MySQL implementation
+    /// Extension class for the MySqlCommand
     /// </summary>
-    public static class Parameters
+    public static class MySqlCommandExtensions
     {
         /// <summary>
         /// Extension to the MySqlCommand class to add all Parameters in a Dictionary directly
@@ -18,30 +18,6 @@ namespace GHMatti.MySQL
             if (parameters != null)
                 foreach (KeyValuePair<string, dynamic> kvp in parameters)
                     cmd.Parameters.AddWithValue(kvp.Key, kvp.Value);
-        }
-
-        /// <summary>
-        /// Check if the user supplied parameters are in the correct shape
-        /// </summary>
-        /// <param name="parameters">Parameters to parse</param>
-        /// <param name="debug">if true write a warning for incorrectly-shaped parameters</param>
-        /// <returns>Parameters in dictionary form parsed</returns>
-        public static IDictionary<string, dynamic> TryParse(dynamic parameters, bool debug = true)
-        {
-            IDictionary<string, dynamic> parsedParameters = null;
-            try
-            {
-                parsedParameters = parameters;
-            }
-            catch
-            {
-                // Only Warn that the user supplied bad parameters when debug is set to true
-                if (debug)
-                    CitizenFX.Core.Debug.WriteLine("[GHMattiMySQL Warning] Parameters are not in Dictionary-shape");
-                parsedParameters = null;
-            }
-
-            return parsedParameters;
         }
 
         /// <summary>

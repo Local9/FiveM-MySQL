@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GHMatti.MySQL
+namespace GHMatti.MySQL.Utilities
 {
     /// <summary>
     /// MultiRow Parsing Class
     /// </summary>
-    public class MultiRow
+    public class MultiRowCommandBuilder
     {
         /// <summary>
         /// Return attributes for Command Text and Parameters
@@ -29,7 +29,7 @@ namespace GHMatti.MySQL
         /// <summary>
         /// Constructor nothing special
         /// </summary>
-        public MultiRow()
+        public MultiRowCommandBuilder()
         {
             mysqlCommandText = new StringBuilder();
             mysqlParameters = new Dictionary<string, dynamic>();
@@ -42,9 +42,9 @@ namespace GHMatti.MySQL
         /// <param name="tablename">name of the table that is inserted into</param>
         /// <param name="parameters">List of dictionarys presenting the rows to be inserted</param>
         /// <returns></returns>
-        public static MultiRow TryParse(string tablename, dynamic parameters)
+        public static MultiRowCommandBuilder TryParse(string tablename, dynamic parameters)
         {
-            return (new MultiRow()).Parse(tablename, parameters);
+            return (new MultiRowCommandBuilder()).Parse(tablename, parameters);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace GHMatti.MySQL
         /// <param name="tablename">name of the table</param>
         /// <param name="parameters">List of dictionarys presenting the rows to be inserted</param>
         /// <returns>this multirow object</returns>
-        private MultiRow Parse(string tablename, dynamic parameters)
+        private MultiRowCommandBuilder Parse(string tablename, dynamic parameters)
         {
             try
             {

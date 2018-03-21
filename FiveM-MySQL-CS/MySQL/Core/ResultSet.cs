@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace GHMatti.MySQL
+namespace GHMatti.MySQL.Core
 {
     /// <summary>
     /// Renaming the Result from Queries to something shorter
     /// </summary>
-    public class MySQLResult : List<Dictionary<string, dynamic>> { }
+    public class ResultSet : List<Dictionary<string, dynamic>> { }
 }

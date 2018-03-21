@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3A76409D-0A04-4C42-ABAE-E1CC17B96325}</ProjectGuid>
+    <ProjectGuid>{5A83C57F-B85E-4BD0-AE45-8EC0A6582B84}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSMySQLLibrary</RootNamespace>
-    <AssemblyName>CSMySQLLibrary</AssemblyName>
+    <RootNamespace>FiveM_MySQL_CS</RootNamespace>
+    <AssemblyName>FiveM-MySQL-CS</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,13 +33,11 @@
     <Reference Include="CitizenFX.Core">
       <HintPath>D:\FXServer\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MySqlConnector, Version=0.37.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MySqlConnector">
       <HintPath>..\..\MySqlConnector\src\MySqlConnector\bin\Release\net45\MySqlConnector.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,17 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\TaskScheduler.cs" />
-    <Compile Include="MySQL\Connection.cs" />
-    <Compile Include="MySQL\MultiRow.cs" />
+    <Compile Include="MySQL\Core\Connection.cs" />
+    <Compile Include="MySQL\Core\Interaction.cs" />
+    <Compile Include="MySQL\Core\NonQuery.cs" />
+    <Compile Include="MySQL\Core\Reader.cs" />
+    <Compile Include="MySQL\Core\ResultSet.cs" />
+    <Compile Include="MySQL\Core\Scalar.cs" />
+    <Compile Include="MySQL\Core\Settings.cs" />
+    <Compile Include="MySQL\Core\Transaction.cs" />
     <Compile Include="MySQL\MySQL.cs" />
-    <Compile Include="MySQL\MySQLResult.cs" />
-    <Compile Include="MySQL\MySQLSettings.cs" />
-    <Compile Include="MySQL\Parameters.cs" />
+    <Compile Include="MySQL\Utilities\MultiRowCommandBuilder.cs" />
+    <Compile Include="MySQL\Utilities\MySqlCommandExtensions.cs" />
+    <Compile Include="MySQL\Utilities\Utility.cs" />
+    <Compile Include="Core\TaskScheduler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
