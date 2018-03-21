@@ -203,7 +203,7 @@ namespace GHMattiMySQL
         private async Task<bool> Transaction(dynamic querys, dynamic parameters)
         {
             await Initialized();
-            return await mysql.Transaction(TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
+            return await mysql.Transaction(Utility.TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace GHMattiMySQL
         private async void TransactionAsync(dynamic querys, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            Task<bool> resultTask = mysql.Transaction(TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
+            Task<bool> resultTask = mysql.Transaction(Utility.TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
 #pragma warning disable CS4014
             resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
 #pragma warning restore CS4014 
@@ -240,26 +240,6 @@ namespace GHMattiMySQL
         {
             while (!initialized)
                 await Delay(0);
-        }
-
-        /// <summary>
-        /// Check if the user supplied queries are in the correct shape, move this somewhere else later
-        /// </summary>
-        /// <param name="querys">List of queries, if not it errors</param>
-        /// <returns>Parsed List of queries</returns>
-        public static System.Collections.Generic.IList<string> TryParseTransactionQuerys(dynamic querys)
-        {
-            System.Collections.Generic.IList<string> parsedList = null;
-            try
-            {
-                parsedList = ((System.Collections.Generic.IList<object>)querys).Select(query => query.ToString()).ToList();
-            }
-            catch
-            {
-                throw new System.Exception("[GHMattiMySQL ERROR] Parameters are not in List-shape");
-            }
-
-            return parsedList;
         }
     }
 }

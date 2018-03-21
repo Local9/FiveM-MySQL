@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GHMatti.MySQL.Utilities
 {
@@ -59,6 +60,26 @@ namespace GHMatti.MySQL.Utilities
             }
 
             return parsedParameters;
+        }
+
+        /// <summary>
+        /// Check if the user supplied queries are in the correct shape, move this somewhere else later
+        /// </summary>
+        /// <param name="querys">List of queries, if not it errors</param>
+        /// <returns>Parsed List of queries</returns>
+        public static IList<string> TryParseTransactionQuerys(dynamic querys)
+        {
+            IList<string> parsedList = null;
+            try
+            {
+                parsedList = ((IList<object>)querys).Select(query => query.ToString()).ToList();
+            }
+            catch
+            {
+                throw new Exception("[GHMattiMySQL ERROR] Parameters are not in List-shape");
+            }
+
+            return parsedList;
         }
     }
 }
