@@ -3,7 +3,4 @@
 FiveM-MySQL/bin/
 FiveM-MySQL/obj/
 packages/
-MySQLTest/bin/
-MySQLTest/obj/
-CS-MySQL-Library/bin/
-CS-MySQL-Library/obj/
+FiveM-MySQL-CS/
