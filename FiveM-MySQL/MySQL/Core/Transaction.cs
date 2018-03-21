@@ -7,16 +7,28 @@ namespace GHMatti.MySQL.Core
 {
     internal class Transaction : Interaction<bool>
     {
-        public MySqlConnection Connection { get; set; }
+        /// <summary>
+        /// Commands are passed to a transaction via this property
+        /// </summary>
         public IList<string> Commands { get; set; }
 
+        /// <summary>
+        /// Constructor method
+        /// </summary>
+        /// <param name="connectionString">Connection string used to connect to the database</param>
+        /// <param name="debug">Print Debug information</param>
         public Transaction(string connectionString, bool debug) : base(connectionString, debug) { }
 
+        /// <summary>
+        /// Execute a transaction
+        /// </summary>
+        /// <param name="cmd">MySqlCommand to be used for the transaction</param>
+        /// <returns>bool transactionSucceeded</returns>
         protected override bool Execute(MySqlCommand cmd)
         {
             bool result = false;
             CommandText = "Transaction";
-            using (MySqlTransaction transaction = Connection.BeginTransaction())
+            using (MySqlTransaction transaction = connection.BeginTransaction())
             {
                 cmd.AddParameters(Parameters);
                 cmd.Transaction = transaction;

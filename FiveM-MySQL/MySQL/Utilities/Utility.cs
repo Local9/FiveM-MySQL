@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace GHMatti.MySQL.Utilities
 {
+    /// <summary>
+    /// Static utility class to print debug information
+    /// </summary>
     internal static class Utility
     {
         /// <summary>

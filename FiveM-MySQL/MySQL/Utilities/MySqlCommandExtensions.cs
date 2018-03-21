@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GHMatti.MySQL.Utilities
 {
     /// <summary>
-    /// Parameter handling class for the MySQL implementation
+    /// Extension class for the MySqlCommand
     /// </summary>
     public static class MySqlCommandExtensions
     {
