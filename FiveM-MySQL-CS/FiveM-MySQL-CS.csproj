@@ -7,8 +7,8 @@
     <ProjectGuid>{5A83C57F-B85E-4BD0-AE45-8EC0A6582B84}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FiveM_MySQL_CS</RootNamespace>
-    <AssemblyName>FiveM-MySQL-CS</AssemblyName>
+    <RootNamespace>GHMatti</RootNamespace>
+    <AssemblyName>CSGHMattiMySQL</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
