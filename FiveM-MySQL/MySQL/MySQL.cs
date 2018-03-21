@@ -44,11 +44,14 @@ namespace GHMatti.MySQL
         /// <returns>rows affected</returns>
         public Task<long> Query(string query, IDictionary<string, dynamic> parameters = null, bool isInsert = false)
         {
-            NonQuery nonQuery = new NonQuery(settings.ConnectionString, settings.Debug);
-            nonQuery.CommandText = query;
-            nonQuery.Parameters = parameters;
-            nonQuery.IsInsert = isInsert;
-            return Task.Factory.StartNew(() => nonQuery.Run(), CancellationToken.None, TaskCreationOptions.None, queryScheduler);
+            return Task.Factory.StartNew(() =>
+            {
+                NonQuery nonQuery = new NonQuery(settings.ConnectionString, settings.Debug);
+                nonQuery.CommandText = query;
+                nonQuery.Parameters = parameters;
+                nonQuery.IsInsert = isInsert;
+                return nonQuery.Run();
+            }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
         }
 
         /// <summary>
@@ -59,10 +62,13 @@ namespace GHMatti.MySQL
         /// <returns>A singular value selected, like SELECT 1; => 1</returns>
         public Task<object> QueryScalar(string query, IDictionary<string, dynamic> parameters = null)
         {
-            Scalar scalar = new Scalar(settings.ConnectionString, settings.Debug);
-            scalar.CommandText = query;
-            scalar.Parameters = parameters;
-            return Task.Factory.StartNew(() => scalar.Run(), CancellationToken.None, TaskCreationOptions.None, queryScheduler);
+            return Task.Factory.StartNew(() =>
+            {
+                Scalar scalar = new Scalar(settings.ConnectionString, settings.Debug);
+                scalar.CommandText = query;
+                scalar.Parameters = parameters;
+                return scalar.Run();
+            }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
         }
 
         /// <summary>
@@ -73,10 +79,13 @@ namespace GHMatti.MySQL
         /// <returns>Result of the Query, List of rows containing dictionarys representing each row</returns>
         public Task<ResultSet> QueryResult(string query, IDictionary<string, dynamic> parameters = null)
         {
-            Reader reader = new Reader(settings.ConnectionString, settings.Debug);
-            reader.CommandText = query;
-            reader.Parameters = parameters;
-            return Task.Factory.StartNew(() => reader.Run(), CancellationToken.None, TaskCreationOptions.None, queryScheduler);
+            return Task.Factory.StartNew(() =>
+            {
+                Reader reader = new Reader(settings.ConnectionString, settings.Debug);
+                reader.CommandText = query;
+                reader.Parameters = parameters;
+                return reader.Run();
+            }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
         }
 
         /// <summary>
@@ -87,10 +96,13 @@ namespace GHMatti.MySQL
         /// <returns>true or false depending on whether the transaction succeeded or not</returns>
         public Task<bool> Transaction(IList<string> querys, IDictionary<string, dynamic> parameters = null)
         {
-            Transaction transaction = new Transaction(settings.ConnectionString, settings.Debug);
-            transaction.Commands = querys;
-            transaction.Parameters = parameters;
-            return Task.Factory.StartNew(() => transaction.Run(), CancellationToken.None, TaskCreationOptions.None, queryScheduler);
+            return Task.Factory.StartNew(() =>
+            {
+                Transaction transaction = new Transaction(settings.ConnectionString, settings.Debug);
+                transaction.Commands = querys;
+                transaction.Parameters = parameters;
+                return transaction.Run();
+            }, CancellationToken.None, TaskCreationOptions.None, queryScheduler);
         }
     }
 }
