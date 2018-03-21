@@ -140,12 +140,10 @@ namespace GHMattiMySQL
         private async void QueryAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            long result = await mysql.Query(query, Utility.TryParseParameters(parameters, settings.Debug));
-            if(callback != null)
-            {
-                await Delay(0);
-                callback.Invoke(result);
-            }
+            Task<long> resultTask = mysql.Query(query, Utility.TryParseParameters(parameters, settings.Debug));
+#pragma warning disable CS4014
+            resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
+#pragma warning restore CS4014
         }
 
         /// <summary>
@@ -157,12 +155,10 @@ namespace GHMattiMySQL
         private async void QueryResultAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.QueryResult(query, Utility.TryParseParameters(parameters, settings.Debug));
-            if (callback != null)
-            {
-                await Delay(0);
-                callback.Invoke(result);
-            }
+            Task<ResultSet> resultTask = mysql.QueryResult(query, Utility.TryParseParameters(parameters, settings.Debug));
+#pragma warning disable CS4014 
+            resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
+#pragma warning restore CS4014 
         }
 
         /// <summary>
@@ -174,12 +170,10 @@ namespace GHMattiMySQL
         private async void QueryScalarAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            object result = await mysql.QueryScalar(query, Utility.TryParseParameters(parameters, settings.Debug));
-            if (callback != null)
-            {
-                await Delay(0);
-                callback.Invoke(result);
-            }
+            Task<object> resultTask = mysql.QueryScalar(query, Utility.TryParseParameters(parameters, settings.Debug));
+#pragma warning disable CS4014 
+            resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
+#pragma warning restore CS4014 
         }
 
         /// <summary>
@@ -194,12 +188,10 @@ namespace GHMattiMySQL
             await Initialized();
             MultiRowCommandBuilder multiRow = await ParseMultiRow(table, parameters);
             bool isInsert = (callback == null) ? false : lastInsertId;
-            long result = await mysql.Query(multiRow.CommandText, multiRow.Parameters, isInsert);
-            if (callback != null)
-            {
-                await Delay(0);
-                callback.Invoke(result);
-            }
+            Task<long> resultTask = mysql.Query(multiRow.CommandText, multiRow.Parameters, isInsert);
+#pragma warning disable CS4014
+            resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
+#pragma warning restore CS4014 
         }
 
         /// <summary>
@@ -223,12 +215,10 @@ namespace GHMattiMySQL
         private async void TransactionAsync(dynamic querys, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            bool result = await mysql.Transaction(TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
-            if (callback != null)
-            {
-                await Delay(0);
-                callback.Invoke(result);
-            }
+            Task<bool> resultTask = mysql.Transaction(TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
+#pragma warning disable CS4014
+            resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
+#pragma warning restore CS4014 
         }
 
         /// <summary>
