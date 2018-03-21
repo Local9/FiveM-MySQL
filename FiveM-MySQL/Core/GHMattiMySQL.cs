@@ -2,6 +2,8 @@
 using CitizenFX.Core.Native;
 using GHMatti.Core;
 using GHMatti.MySQL;
+using GHMatti.MySQL.Core;
+using GHMatti.MySQL.Utilities;
 using System;
 using System.IO;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace GHMattiMySQL
         /// </summary>
         private GHMattiTaskScheduler taskScheduler;
         private MySQL mysql;
-        private MySQLSettings settings;
+        private Settings settings;
         private bool initialized;
 
         /// <summary>
@@ -30,14 +32,14 @@ namespace GHMattiMySQL
         public Core()
         {
             taskScheduler = new GHMattiTaskScheduler();
-            settings = new MySQLSettings();
+            settings = new Settings();
             initialized = false;
             EventHandlers["onServerResourceStart"] += new Action<string>(Initialization);
 
             Exports.Add("Query", new Func<string, dynamic, Task<long>>(
                 (query, parameters) => Query(query, parameters))
             );
-            Exports.Add("QueryResult", new Func<string, dynamic, Task<MySQLResult>>(
+            Exports.Add("QueryResult", new Func<string, dynamic, Task<ResultSet>>(
                 (query, parameters) => QueryResult(query, parameters))
             );
             Exports.Add("QueryScalar", new Func<string, dynamic, Task<object>>(
@@ -102,7 +104,7 @@ namespace GHMattiMySQL
         private async Task<long> Query(string query, dynamic parameters)
         {
             await Initialized();
-            return await mysql.Query(query, Parameters.TryParse(parameters));
+            return await mysql.Query(query, Utility.TryParseParameters(parameters));
         }
 
         /// <summary>
@@ -111,10 +113,10 @@ namespace GHMattiMySQL
         /// <param name="query">The mysql database query string</param>
         /// <param name="parameters">Ideally an IDictionary or table of parameters, can be null, will be parsed</param>
         /// <returns>The result table that was queried</returns>
-        private async Task<MySQLResult> QueryResult(string query, dynamic parameters)
+        private async Task<ResultSet> QueryResult(string query, dynamic parameters)
         {
             await Initialized();
-            return await mysql.QueryResult(query, Parameters.TryParse(parameters));
+            return await mysql.QueryResult(query, Utility.TryParseParameters(parameters));
         }
 
         /// <summary>
@@ -126,7 +128,7 @@ namespace GHMattiMySQL
         private async Task<dynamic> QueryScalar(string query, dynamic parameters)
         {
             await Initialized();
-            return await mysql.QueryScalar(query, Parameters.TryParse(parameters));
+            return await mysql.QueryScalar(query, Utility.TryParseParameters(parameters));
         }
 
         /// <summary>
@@ -138,10 +140,10 @@ namespace GHMattiMySQL
         private async void QueryAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            long result = await mysql.Query(query, Parameters.TryParse(parameters, settings.Debug));
-            if (callback != null)
+            long result = await mysql.Query(query, Utility.TryParseParameters(parameters, settings.Debug));
+            if(callback != null)
             {
-                await Delay(0); // need to wait for the next server tick before invoking, will error otherwise
+                await Delay(0);
                 callback.Invoke(result);
             }
         }
@@ -155,7 +157,7 @@ namespace GHMattiMySQL
         private async void QueryResultAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            dynamic result = await mysql.QueryResult(query, Parameters.TryParse(parameters, settings.Debug));
+            dynamic result = await mysql.QueryResult(query, Utility.TryParseParameters(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0);
@@ -172,7 +174,7 @@ namespace GHMattiMySQL
         private async void QueryScalarAsync(string query, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            object result = await mysql.QueryScalar(query, Parameters.TryParse(parameters, settings.Debug));
+            object result = await mysql.QueryScalar(query, Utility.TryParseParameters(parameters, settings.Debug));
             if (callback != null)
             {
                 await Delay(0);
@@ -190,7 +192,7 @@ namespace GHMattiMySQL
         private async void Insert(string table, dynamic parameters, CallbackDelegate callback = null, bool lastInsertId = false)
         {
             await Initialized();
-            MultiRow multiRow = await ParseMultiRow(table, parameters);
+            MultiRowCommandBuilder multiRow = await ParseMultiRow(table, parameters);
             bool isInsert = (callback == null) ? false : lastInsertId;
             long result = await mysql.Query(multiRow.CommandText, multiRow.Parameters, isInsert);
             if (callback != null)
@@ -209,7 +211,7 @@ namespace GHMattiMySQL
         private async Task<bool> Transaction(dynamic querys, dynamic parameters)
         {
             await Initialized();
-            return await mysql.Transaction(TryParseTransactionQuerys(querys), Parameters.TryParse(parameters));
+            return await mysql.Transaction(TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
         }
 
         /// <summary>
@@ -221,7 +223,7 @@ namespace GHMattiMySQL
         private async void TransactionAsync(dynamic querys, dynamic parameters, CallbackDelegate callback = null)
         {
             await Initialized();
-            bool result = await mysql.Transaction(TryParseTransactionQuerys(querys), Parameters.TryParse(parameters));
+            bool result = await mysql.Transaction(TryParseTransactionQuerys(querys), Utility.TryParseParameters(parameters));
             if (callback != null)
             {
                 await Delay(0);
@@ -235,9 +237,9 @@ namespace GHMattiMySQL
         /// <param name="table">Name of the table</param>
         /// <param name="parameters">List of dictionarys which represent each row inserted</param>
         /// <returns>Returns the MultiRow object which consists of a built query string and a set of parameters</returns>
-        private async Task<MultiRow> ParseMultiRow(string table, dynamic parameters) => await Task.Factory.StartNew(() =>
+        private async Task<MultiRowCommandBuilder> ParseMultiRow(string table, dynamic parameters) => await Task.Factory.StartNew(() =>
         {
-            return MultiRow.TryParse(table, parameters);
+            return MultiRowCommandBuilder.TryParse(table, parameters);
         }, CancellationToken.None, TaskCreationOptions.None, taskScheduler);
 
         /// <summary>

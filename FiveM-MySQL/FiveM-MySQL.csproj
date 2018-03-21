@@ -33,39 +33,38 @@
     <Reference Include="CitizenFX.Core">
       <HintPath>D:\FXServer\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MySqlConnector, Version=0.36.1.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySqlConnector.0.36.1\lib\net45\MySqlConnector.dll</HintPath>
+    <Reference Include="MySqlConnector, Version=0.37.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MySqlConnector\src\MySqlConnector\bin\Release\net45\MySqlConnector.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MySQL\Core\NonQuery.cs" />
     <Compile Include="Core\TaskScheduler.cs" />
     <Compile Include="Core\GHMattiMySQL.cs" />
-    <Compile Include="MySQL\MySQLSettings.cs" />
-    <Compile Include="MySQL\Connection.cs" />
-    <Compile Include="MySQL\MultiRow.cs" />
+    <Compile Include="MySQL\Core\Interaction.cs" />
+    <Compile Include="MySQL\Core\Reader.cs" />
+    <Compile Include="MySQL\Core\Settings.cs" />
+    <Compile Include="MySQL\Core\Connection.cs" />
+    <Compile Include="MySQL\Core\Scalar.cs" />
+    <Compile Include="MySQL\Core\Transaction.cs" />
+    <Compile Include="MySQL\Utilities\MultiRowCommandBuilder.cs" />
     <Compile Include="MySQL\MySQL.cs" />
-    <Compile Include="MySQL\MySQLResult.cs" />
-    <Compile Include="MySQL\Parameters.cs" />
+    <Compile Include="MySQL\Core\ResultSet.cs" />
+    <Compile Include="MySQL\Utilities\MySqlCommandExtensions.cs" />
+    <Compile Include="MySQL\Utilities\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="resource\__resource.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

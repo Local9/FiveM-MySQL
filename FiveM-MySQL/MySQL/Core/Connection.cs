@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 
-namespace GHMatti.MySQL
+namespace GHMatti.MySQL.Core
 {
     /// <summary>
     /// Connection Managing class, so we do not have to check if we actually close connections

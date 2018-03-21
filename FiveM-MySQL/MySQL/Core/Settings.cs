@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GHMatti.MySQL
+namespace GHMatti.MySQL.Core
 {
     /// <summary>
     /// Class to handle the settings for MySQL
     /// </summary>
-    public class MySQLSettings
+    public class Settings
     {
         /// <summary>
         /// Public attributes anyone can read
@@ -40,7 +40,7 @@ namespace GHMatti.MySQL
         /// <summary>
         /// empty constructor, got nothing to do
         /// </summary>
-        public MySQLSettings() { }
+        public Settings() { }
 
         /// <summary>
         /// Apply the configuration from the internal variables to the actual variables
