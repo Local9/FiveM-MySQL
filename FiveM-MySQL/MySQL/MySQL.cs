@@ -30,9 +30,8 @@ namespace GHMatti.MySQL
             settings = mysqlSettings;
             settings.Apply();
             queryScheduler = taskScheduler;
-            // Cannot execute that connection in on the server thread, but we need to test if the connection string is actually correct
-            // This will cause a hitch if the constructor is not put in a Task on a different thread
-            using (Connection db = new Connection(settings.ConnectionString)) { }
+            // Test the Database Connection
+            Query("SELECT 1;");
         }
 
         /// <summary>
