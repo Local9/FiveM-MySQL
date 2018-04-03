@@ -71,7 +71,7 @@ namespace GHMattiMySQL
         /// Initialization function. Nothing will execute before this is not done. Maybe remove the async and await?
         /// </summary>
         /// <param name="resourcename">Gets autoset to the resource that is started</param>
-        private async void Initialization(string resourcename)
+        private void Initialization(string resourcename)
         {
             if (API.GetCurrentResourceName() == resourcename)
             {
@@ -80,7 +80,7 @@ namespace GHMattiMySQL
                 taskScheduler.ThreadLimit = API.GetConvarInt("mysql_thread_limit", 0);
                 // You cannot do API Calls in these Threads, you need to do them before or inbetween. Use them only for heavy duty work,
                 // (file operations, database interaction or transformation of data), or when working with an external library.
-                await Task.Factory.StartNew(() =>
+                Task.Factory.StartNew(() =>
                 {
                     XDocument xDocument = XDocument.Load(Path.Combine("resources", resourcename, "settings.xml"));
                     settings.XMLConfiguration = xDocument.Descendants("setting").ToDictionary(
@@ -156,9 +156,9 @@ namespace GHMattiMySQL
         {
             await Initialized();
             Task<ResultSet> resultTask = mysql.QueryResult(query, Utility.TryParseParameters(parameters, settings.Debug));
-#pragma warning disable CS4014 
+#pragma warning disable CS4014
             resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
-#pragma warning restore CS4014 
+#pragma warning restore CS4014
         }
 
         /// <summary>
@@ -171,9 +171,9 @@ namespace GHMattiMySQL
         {
             await Initialized();
             Task<object> resultTask = mysql.QueryScalar(query, Utility.TryParseParameters(parameters, settings.Debug));
-#pragma warning disable CS4014 
+#pragma warning disable CS4014
             resultTask.ContinueWith((task) => callback?.Invoke(task.Result));
-#pragma warning restore CS4014 
+#pragma warning restore CS4014
         }
 
         /// <summary>
