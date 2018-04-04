@@ -45,7 +45,7 @@ namespace GHMattiMySQL
             Exports.Add("QueryScalar", new Func<string, dynamic, Task<object>>(
                 (query, parameters) => QueryScalar(query, parameters))
             );
-            Exports.Add("TransactionAsync", new Func<dynamic, dynamic, Task<bool>>(
+            Exports.Add("Transaction", new Func<dynamic, dynamic, Task<bool>>(
                 (querys, parameters) => Transaction(querys, parameters))
             );
 
