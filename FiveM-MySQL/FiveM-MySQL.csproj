@@ -47,20 +47,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MySQL\Core\NonQuery.cs" />
-    <Compile Include="Core\TaskScheduler.cs" />
+    <Compile Include="Data\MySQL\Core\NonQuery.cs" />
+    <Compile Include="Utilities\GHMattiTaskScheduler.cs" />
     <Compile Include="Core\GHMattiMySQL.cs" />
-    <Compile Include="MySQL\Core\Interaction.cs" />
-    <Compile Include="MySQL\Core\Reader.cs" />
-    <Compile Include="MySQL\Core\Settings.cs" />
-    <Compile Include="MySQL\Core\Connection.cs" />
-    <Compile Include="MySQL\Core\Scalar.cs" />
-    <Compile Include="MySQL\Core\Transaction.cs" />
-    <Compile Include="MySQL\Utilities\MultiRowCommandBuilder.cs" />
-    <Compile Include="MySQL\MySQL.cs" />
-    <Compile Include="MySQL\Core\ResultSet.cs" />
-    <Compile Include="MySQL\Utilities\MySqlCommandExtensions.cs" />
-    <Compile Include="MySQL\Utilities\Utility.cs" />
+    <Compile Include="Data\MySQL\Core\Interaction.cs" />
+    <Compile Include="Data\MySQL\Core\Reader.cs" />
+    <Compile Include="Data\MySQL\Core\Settings.cs" />
+    <Compile Include="Data\MySQL\Core\Connection.cs" />
+    <Compile Include="Data\MySQL\Core\Scalar.cs" />
+    <Compile Include="Data\MySQL\Core\Transaction.cs" />
+    <Compile Include="Data\MySQL\Utilities\MultiRowCommandBuilder.cs" />
+    <Compile Include="Data\MySQL\MySQL.cs" />
+    <Compile Include="Data\MySQL\Core\ResultSet.cs" />
+    <Compile Include="Data\MySQL\Utilities\MySqlCommandExtensions.cs" />
+    <Compile Include="Data\MySQL\Utilities\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
