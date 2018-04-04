@@ -1,9 +1,9 @@
-﻿using GHMatti.MySQL.Utilities;
+﻿using GHMatti.Data.MySQL.Utilities;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace GHMatti.MySQL.Core
+namespace GHMatti.Data.MySQL.Core
 {
     /// <summary>
     /// Abstract class to implement basic mysql database interactions

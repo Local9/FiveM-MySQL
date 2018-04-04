@@ -1,7 +1,8 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 
-namespace GHMatti.MySQL.Core
+namespace GHMatti.Data.MySQL.Core
 {
     /// <summary>
     /// Class to handle the settings for MySQL
@@ -11,7 +12,7 @@ namespace GHMatti.MySQL.Core
         /// <summary>
         /// Public attributes anyone can read
         /// </summary>
-        public string ConnectionString => connectionString;
+        public string ConnectionString => connectionStringBuilder.ConnectionString;
         public bool Debug => debug;
 
         /// <summary>
@@ -24,7 +25,7 @@ namespace GHMatti.MySQL.Core
         /// <summary>
         /// Actual variables that the class manages
         /// </summary>
-        private string connectionString = "";
+        private MySqlConnectionStringBuilder connectionStringBuilder = new MySqlConnectionStringBuilder();
         private bool debug = false;
 
         /// <summary>
@@ -50,15 +51,16 @@ namespace GHMatti.MySQL.Core
             if (Convert.ToBoolean(xmlConfiguration["MySQL:UseConvars"]))
             {
                 debug = Convert.ToBoolean(convarDebug);
-                connectionString = convarConnectionString;
+                connectionStringBuilder.ConnectionString = convarConnectionString;
             }
             else
             {
                 debug = Convert.ToBoolean(xmlConfiguration["MySQL:Debug"]);
-                connectionString = String.Format("SERVER={0};PORT={1};DATABASE={2};UID={3};PASSWORD={4}",
-                    xmlConfiguration["MySQL:Server"], xmlConfiguration["MySQL:Port"], xmlConfiguration["MySQL:Database"],
-                    xmlConfiguration["MySQL:Username"], xmlConfiguration["MySQL:Password"]
-                );
+                connectionStringBuilder.Server = xmlConfiguration["MySQL:Server"];
+                connectionStringBuilder.Port = Convert.ToUInt32(xmlConfiguration["MySQL:Port"]);
+                connectionStringBuilder.Database = xmlConfiguration["MySQL:Database"];
+                connectionStringBuilder.UserID = xmlConfiguration["MySQL:Username"];
+                connectionStringBuilder.Password = xmlConfiguration["MySQL:Password"];
             }
         }
     }

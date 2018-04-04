@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 
-namespace GHMatti.MySQL.Utilities
+namespace GHMatti.Data.MySQL.Utilities
 {
     /// <summary>
     /// Extension class for the MySqlCommand
