@@ -12,7 +12,7 @@ namespace GHMatti.MySQL.Core
         /// <summary>
         /// Public attributes anyone can read
         /// </summary>
-        public string ConnectionString => connectionString;
+        public string ConnectionString => connectionStringBuilder.ConnectionString;
         public bool Debug => debug;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace GHMatti.MySQL.Core
         /// <summary>
         /// Actual variables that the class manages
         /// </summary>
-        private string connectionString = "";
+        private MySqlConnectionStringBuilder connectionStringBuilder = new MySqlConnectionStringBuilder();
         private bool debug = false;
 
         /// <summary>
@@ -48,7 +48,6 @@ namespace GHMatti.MySQL.Core
         /// </summary>
         public void Apply()
         {
-            MySqlConnectionStringBuilder connectionStringBuilder = new MySqlConnectionStringBuilder();
             if (Convert.ToBoolean(xmlConfiguration["MySQL:UseConvars"]))
             {
                 debug = Convert.ToBoolean(convarDebug);
@@ -63,7 +62,6 @@ namespace GHMatti.MySQL.Core
                 connectionStringBuilder.UserID = xmlConfiguration["MySQL:Username"];
                 connectionStringBuilder.Password = xmlConfiguration["MySQL:Password"];
             }
-            connectionString = connectionStringBuilder.ConnectionString;
         }
     }
 }
