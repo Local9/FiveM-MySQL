@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GHMatti.MySQL.Utilities
+namespace GHMatti.Data.MySQL.Utilities
 {
     /// <summary>
     /// Static utility class to print debug information

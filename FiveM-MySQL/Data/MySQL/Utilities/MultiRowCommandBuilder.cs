@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GHMatti.MySQL.Utilities
+namespace GHMatti.Data.MySQL.Utilities
 {
     /// <summary>
     /// MultiRow Parsing Class

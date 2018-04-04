@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GHMatti.Core
+namespace GHMatti.Utilities
 {
     /// <summary>
     /// Task Scheduler Replacement Class, so we do not have to Block the Server Thread

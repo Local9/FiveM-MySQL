@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GHMatti.MySQL.Core
+namespace GHMatti.Data.MySQL.Core
 {
     /// <summary>
     /// Class to handle the settings for MySQL

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GHMatti.MySQL.Core
+namespace GHMatti.Data.MySQL.Core
 {
     /// <summary>
     /// Renaming the Result from Queries to something shorter

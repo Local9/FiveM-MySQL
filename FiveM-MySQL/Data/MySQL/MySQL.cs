@@ -1,10 +1,10 @@
-﻿using GHMatti.Core;
-using GHMatti.MySQL.Core;
+﻿using GHMatti.Data.MySQL.Core;
+using GHMatti.Utilities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GHMatti.MySQL
+namespace GHMatti.Data.MySQL
 {
     /// <summary>
     /// MySQL Wrapper Class using a custom task scheduler

@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using GHMatti.Core;
-using GHMatti.MySQL;
-using GHMatti.MySQL.Core;
-using GHMatti.MySQL.Utilities;
+using GHMatti.Data.MySQL;
+using GHMatti.Data.MySQL.Core;
+using GHMatti.Data.MySQL.Utilities;
+using GHMatti.Utilities;
 using System;
 using System.IO;
 using System.Linq;

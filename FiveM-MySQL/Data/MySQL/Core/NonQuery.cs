@@ -1,7 +1,7 @@
-﻿using GHMatti.MySQL.Utilities;
+﻿using GHMatti.Data.MySQL.Utilities;
 using MySql.Data.MySqlClient;
 
-namespace GHMatti.MySQL.Core
+namespace GHMatti.Data.MySQL.Core
 {
     internal class NonQuery : Interaction<long>
     {
