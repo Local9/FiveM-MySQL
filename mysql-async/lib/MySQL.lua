@@ -3,7 +3,8 @@
 
 MySQL = {
     Async = {},
-    Sync = {}
+    Sync = {},
+	Threaded = {}
 }
 
 function MySQL.Sync.execute(query, parameters)
@@ -20,6 +21,10 @@ end
 
 MySQL.Sync.insert = MySQL.Sync.execute
 
+function MySQL.Sync.transaction(querys, params, callback)
+    return exports["GHMattiMySQL"]:Transaction(querys, params)
+end
+
 function MySQL.Async.execute(query, parameters, callback)
     exports["GHMattiMySQL"]:QueryAsync(query, parameters, callback)
 end
@@ -33,6 +38,15 @@ function MySQL.Async.fetchScalar(query, parameters, callback)
 end
 
 MySQL.Async.insert = MySQL.Async.execute
+
+function MySQL.Async.transaction(querys, params, callback)
+    return exports["GHMattiMySQL"]:TransactionAsync(querys, params, callback)
+end
+
+MySQL.Threaded.execute = MySQL.Sync.execute
+MySQL.Threaded.fetchAll = MySQL.Sync.fetchAll
+MySQL.Threaded.fetchScalar = MySQL.Sync.fetchScalar
+MySQL.Threaded.insert = MySQL.Sync.insert
 
 local isReady = false
 AddEventHandler("GHMattiMySQLStarted", function()
