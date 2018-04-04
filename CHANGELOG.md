@@ -1,3 +1,10 @@
+## Version 0.6.1 [ 2018 / 04 / 04 ]
+* Light refactor to fit my server
+* Uses the ConnectionStringBuilder now internally to build a connection string
+* Added a fix for it loading multiple buffers under some circumstances
+* Updated to a custom MySqlConnector 0.38.0 (a different one from mysql-async which results in a small performance gain)
+* Fixed a major copy & paste mistake rendering Transaction inaccessible from Lua
+
 ## Version 0.6.0 [ 2018 / 03 / 21 ]
 * Major Code refactoring
 * Stability increased a lot (at least for me)

@@ -36,6 +36,7 @@ Async exports do not wait for the result to be returned, thus they do not return
 * **2018/03/12** *Version: 0.5.2:* Fixed a Bug where QueryScalar would not return null on System.DBNull; Thanks to @Scyar_Gameur
 * **2018/03/13** *Version: 0.5.3:* Bugfixed the Bugfix; Thanks to @justcfx2u
 * **2018/03/21** *Version: 0.6.0:* Major code refactoring, possibly increased the stability by a lot, branched out components, Updated to a custom MySqlConnector 0.37.1
+* **2018/04/04** *Version: 0.6.1:* Small refactor (just moving files around and renaming namespaces), update to a custom 0.38.0 MySqlConnector, fix for loading multiple buffers, switched to using the connectionstringbuilder for the xml connection data. Fixed a major transaction bug (Sync version, which was inaccessible from lua).
 
 ## FAQ
 * *Don't there have to be exports specified in the `__resource.lua`?*: No! C# is special.
