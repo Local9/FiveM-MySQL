@@ -1,6 +1,8 @@
 # GHMattiMySQL
 Another MySQL implementation for FiveM's FXServer with Multithreading.
 
+Visit https://github.com/GHMatti/ghmattimysql for the new node.js version (currently in beta).
+
 ## Download
 https://github.com/GHMatti/FiveM-MySQL/releases
 
