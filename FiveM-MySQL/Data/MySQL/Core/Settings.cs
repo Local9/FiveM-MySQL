@@ -61,6 +61,7 @@ namespace GHMatti.Data.MySQL.Core
                 connectionStringBuilder.Database = xmlConfiguration["MySQL:Database"];
                 connectionStringBuilder.UserID = xmlConfiguration["MySQL:Username"];
                 connectionStringBuilder.Password = xmlConfiguration["MySQL:Password"];
+                connectionStringBuilder.MinimumPoolSize = Convert.ToUInt32(xmlConfiguration["MySQL:MinPoolSize"]);
             }
         }
     }
