@@ -26,7 +26,7 @@ namespace GHMatti.Data.MySQL.Core
         /// </summary>
         /// <param name="connectionString">Connection string used to connect to the database</param>
         /// <param name="debug">Print Debug information</param>
-        public Interaction(string connectionString, bool debug) 
+        public Interaction(string connectionString, bool debug)
         {
             ConnectionString = connectionString;
             Debug = debug;

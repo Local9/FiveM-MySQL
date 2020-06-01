@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using GHMatti.Data.MySQL.Utilities;
+﻿using GHMatti.Data.MySQL.Utilities;
 using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
 
 namespace GHMatti.Data.MySQL.Core
 {

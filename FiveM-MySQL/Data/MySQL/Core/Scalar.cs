@@ -1,6 +1,6 @@
-﻿using System;
-using GHMatti.Data.MySQL.Utilities;
+﻿using GHMatti.Data.MySQL.Utilities;
 using MySql.Data.MySqlClient;
+using System;
 
 namespace GHMatti.Data.MySQL.Core
 {

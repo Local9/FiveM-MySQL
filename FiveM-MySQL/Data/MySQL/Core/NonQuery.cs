@@ -33,7 +33,7 @@ namespace GHMatti.Data.MySQL.Core
             {
                 result = cmd.ExecuteNonQuery();
             }
-            catch(MySqlException mySqlEx)
+            catch (MySqlException mySqlEx)
             {
                 Utility.PrintErrorInformation(mySqlEx, Debug);
             }
