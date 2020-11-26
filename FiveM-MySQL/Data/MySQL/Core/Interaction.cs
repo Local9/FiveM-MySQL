@@ -1,5 +1,5 @@
 ﻿using GHMatti.Data.MySQL.Utilities;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Collections.Generic;
 using System.Diagnostics;
 

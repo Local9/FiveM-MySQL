@@ -1,5 +1,5 @@
 ﻿using GHMatti.Data.MySQL.Utilities;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Linq;
 
 namespace GHMatti.Data.MySQL.Core
